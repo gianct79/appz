@@ -42,10 +42,10 @@ namespace printApp
             this.fileExitMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.editMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.editCreateBitmapMenu = new System.Windows.Forms.ToolStripMenuItem();
-            this.editCreateBitmapA4300Menu = new System.Windows.Forms.ToolStripMenuItem();
-            this.editCreateBitmapA4600Menu = new System.Windows.Forms.ToolStripMenuItem();
-            this.editCreateBitmapLetter300Menu = new System.Windows.Forms.ToolStripMenuItem();
-            this.editCreateBitmapLetter600Menu = new System.Windows.Forms.ToolStripMenuItem();
+            this.editCreateBitmapA4300Menu = new printApp.ToolStripRadioButtonMenuItem();
+            this.editCreateBitmapA4600Menu = new printApp.ToolStripRadioButtonMenuItem();
+            this.editCreateBitmapLetter300Menu = new printApp.ToolStripRadioButtonMenuItem();
+            this.editCreateBitmapLetter600Menu = new printApp.ToolStripRadioButtonMenuItem();
             this.viewMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.viewZoomMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.viewZoom25Menu = new printApp.ToolStripRadioButtonMenuItem();
@@ -103,6 +103,7 @@ namespace printApp
             this.filePrintMenu.Name = "filePrintMenu";
             this.filePrintMenu.Size = new System.Drawing.Size(125, 22);
             this.filePrintMenu.Text = "Print...";
+            this.filePrintMenu.Click += new System.EventHandler(this.filePrintMenu_Click);
             // 
             // toolStripMenuItem2
             // 
@@ -132,37 +133,43 @@ namespace printApp
             this.editCreateBitmapLetter300Menu,
             this.editCreateBitmapLetter600Menu});
             this.editCreateBitmapMenu.Name = "editCreateBitmapMenu";
-            this.editCreateBitmapMenu.Size = new System.Drawing.Size(142, 22);
+            this.editCreateBitmapMenu.Size = new System.Drawing.Size(152, 22);
             this.editCreateBitmapMenu.Text = "Create Bitmap";
             // 
             // editCreateBitmapA4300Menu
             // 
+            this.editCreateBitmapA4300Menu.CheckOnClick = true;
             this.editCreateBitmapA4300Menu.Name = "editCreateBitmapA4300Menu";
-            this.editCreateBitmapA4300Menu.Size = new System.Drawing.Size(141, 22);
+            this.editCreateBitmapA4300Menu.Size = new System.Drawing.Size(152, 22);
             this.editCreateBitmapA4300Menu.Tag = "0";
             this.editCreateBitmapA4300Menu.Text = "A4 300 dpi";
             this.editCreateBitmapA4300Menu.Click += new System.EventHandler(this.editCreateBitmapMenu_Click);
             // 
             // editCreateBitmapA4600Menu
             // 
+            this.editCreateBitmapA4600Menu.CheckOnClick = true;
             this.editCreateBitmapA4600Menu.Name = "editCreateBitmapA4600Menu";
-            this.editCreateBitmapA4600Menu.Size = new System.Drawing.Size(141, 22);
+            this.editCreateBitmapA4600Menu.Size = new System.Drawing.Size(152, 22);
             this.editCreateBitmapA4600Menu.Tag = "1";
             this.editCreateBitmapA4600Menu.Text = "A4 600 dpi";
             this.editCreateBitmapA4600Menu.Click += new System.EventHandler(this.editCreateBitmapMenu_Click);
             // 
             // editCreateBitmapLetter300Menu
             // 
+            this.editCreateBitmapLetter300Menu.Checked = true;
+            this.editCreateBitmapLetter300Menu.CheckOnClick = true;
+            this.editCreateBitmapLetter300Menu.CheckState = System.Windows.Forms.CheckState.Checked;
             this.editCreateBitmapLetter300Menu.Name = "editCreateBitmapLetter300Menu";
-            this.editCreateBitmapLetter300Menu.Size = new System.Drawing.Size(141, 22);
+            this.editCreateBitmapLetter300Menu.Size = new System.Drawing.Size(152, 22);
             this.editCreateBitmapLetter300Menu.Tag = "2";
             this.editCreateBitmapLetter300Menu.Text = "Letter 300 dpi";
             this.editCreateBitmapLetter300Menu.Click += new System.EventHandler(this.editCreateBitmapMenu_Click);
             // 
             // editCreateBitmapLetter600Menu
             // 
+            this.editCreateBitmapLetter600Menu.CheckOnClick = true;
             this.editCreateBitmapLetter600Menu.Name = "editCreateBitmapLetter600Menu";
-            this.editCreateBitmapLetter600Menu.Size = new System.Drawing.Size(141, 22);
+            this.editCreateBitmapLetter600Menu.Size = new System.Drawing.Size(152, 22);
             this.editCreateBitmapLetter600Menu.Tag = "3";
             this.editCreateBitmapLetter600Menu.Text = "Letter 600 dpi";
             this.editCreateBitmapLetter600Menu.Click += new System.EventHandler(this.editCreateBitmapMenu_Click);
@@ -183,14 +190,16 @@ namespace printApp
             this.viewZoom75Menu,
             this.viewZoom100Menu});
             this.viewZoomMenu.Name = "viewZoomMenu";
-            this.viewZoomMenu.Size = new System.Drawing.Size(152, 22);
+            this.viewZoomMenu.Size = new System.Drawing.Size(100, 22);
             this.viewZoomMenu.Text = "Zoom";
             // 
             // viewZoom25Menu
             // 
+            this.viewZoom25Menu.Checked = true;
             this.viewZoom25Menu.CheckOnClick = true;
+            this.viewZoom25Menu.CheckState = System.Windows.Forms.CheckState.Checked;
             this.viewZoom25Menu.Name = "viewZoom25Menu";
-            this.viewZoom25Menu.Size = new System.Drawing.Size(152, 22);
+            this.viewZoom25Menu.Size = new System.Drawing.Size(103, 22);
             this.viewZoom25Menu.Text = "25%";
             this.viewZoom25Menu.Click += new System.EventHandler(this.viewZoomMenu_Click);
             // 
@@ -198,7 +207,7 @@ namespace printApp
             // 
             this.viewZoom50Menu.CheckOnClick = true;
             this.viewZoom50Menu.Name = "viewZoom50Menu";
-            this.viewZoom50Menu.Size = new System.Drawing.Size(152, 22);
+            this.viewZoom50Menu.Size = new System.Drawing.Size(103, 22);
             this.viewZoom50Menu.Text = "50%";
             this.viewZoom50Menu.Click += new System.EventHandler(this.viewZoomMenu_Click);
             // 
@@ -206,17 +215,15 @@ namespace printApp
             // 
             this.viewZoom75Menu.CheckOnClick = true;
             this.viewZoom75Menu.Name = "viewZoom75Menu";
-            this.viewZoom75Menu.Size = new System.Drawing.Size(152, 22);
+            this.viewZoom75Menu.Size = new System.Drawing.Size(103, 22);
             this.viewZoom75Menu.Text = "75%";
             this.viewZoom75Menu.Click += new System.EventHandler(this.viewZoomMenu_Click);
             // 
             // viewZoom100Menu
             // 
-            this.viewZoom100Menu.Checked = true;
             this.viewZoom100Menu.CheckOnClick = true;
-            this.viewZoom100Menu.CheckState = System.Windows.Forms.CheckState.Checked;
             this.viewZoom100Menu.Name = "viewZoom100Menu";
-            this.viewZoom100Menu.Size = new System.Drawing.Size(152, 22);
+            this.viewZoom100Menu.Size = new System.Drawing.Size(103, 22);
             this.viewZoom100Menu.Text = "100%";
             this.viewZoom100Menu.Click += new System.EventHandler(this.viewZoomMenu_Click);
             // 
@@ -232,7 +239,7 @@ namespace printApp
             this.imageViewer.Size = new System.Drawing.Size(493, 376);
             this.imageViewer.TabIndex = 2;
             this.imageViewer.Text = "imageViewer";
-            this.imageViewer.ZoomFactor = 1F;
+            this.imageViewer.ZoomFactor = 0.25F;
             // 
             // MainForm
             // 
@@ -262,10 +269,10 @@ namespace printApp
         private System.Windows.Forms.ToolStripMenuItem fileExitMenu;
         private System.Windows.Forms.ToolStripMenuItem editMenu;
         private System.Windows.Forms.ToolStripMenuItem editCreateBitmapMenu;
-        private System.Windows.Forms.ToolStripMenuItem editCreateBitmapA4300Menu;
-        private System.Windows.Forms.ToolStripMenuItem editCreateBitmapA4600Menu;
-        private System.Windows.Forms.ToolStripMenuItem editCreateBitmapLetter300Menu;
-        private System.Windows.Forms.ToolStripMenuItem editCreateBitmapLetter600Menu;
+        private ToolStripRadioButtonMenuItem editCreateBitmapA4300Menu;
+        private ToolStripRadioButtonMenuItem editCreateBitmapA4600Menu;
+        private ToolStripRadioButtonMenuItem editCreateBitmapLetter300Menu;
+        private ToolStripRadioButtonMenuItem editCreateBitmapLetter600Menu;
         private System.Windows.Forms.ToolStripMenuItem fileSaveAsMenu;
         private System.Windows.Forms.ToolStripMenuItem viewMenu;
         private System.Windows.Forms.ToolStripMenuItem viewZoomMenu;
