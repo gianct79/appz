@@ -220,7 +220,7 @@ namespace printApp
             this.imageViewer.AutoScrollMargin = new System.Drawing.Size(493, 376);
             this.imageViewer.Dock = System.Windows.Forms.DockStyle.Fill;
             this.imageViewer.Image = null;
-            this.imageViewer.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.Low;
+            this.imageViewer.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.High;
             this.imageViewer.Location = new System.Drawing.Point(0, 24);
             this.imageViewer.Name = "imageViewer";
             this.imageViewer.Size = new System.Drawing.Size(493, 376);

@@ -29,16 +29,19 @@ namespace printApp
 
             if (selectedMenu.Equals(editCreateBitmapA4300Menu))
             {
-                CreateBitmap(2481, 3507, 300, 300);
+                CreateBitmap("A4 300 dpi", 2481, 3507, 300, 300);
             }
             else if (selectedMenu.Equals(editCreateBitmapA4600Menu))
             {
+                CreateBitmap("A4 600 dpi", 4962, 7014, 600, 600);
             }
             else if (selectedMenu.Equals(editCreateBitmapLetter300Menu))
             {
+                CreateBitmap("Letter 300 dpi", 2550, 3300, 300, 300);
             }
             else
             {
+                CreateBitmap("Letter 600 dpi", 5100, 6600, 600, 600);
             }
 
             Cursor.Current = Cursors.Default;
@@ -70,34 +73,42 @@ namespace printApp
             Cursor.Current = Cursors.Default;
         }
 
-        private void CreateBitmap(int width, int height, float resX, float resY)
+        private void CreateBitmap(string text, int width, int height, int resX, int resY)
         {
-            int colWidth = width / 100;
-            int rowHeight = height / 100;
+            Bitmap bitmap = new Bitmap(width, height, PixelFormat.Format32bppArgb);
+            bitmap.SetResolution(resX, resY);
 
-            Bitmap checks = new Bitmap(width, height, PixelFormat.Format32bppArgb);
-            checks.SetResolution(resX, resY);
-
-            for (int columns = 0; columns < 100; columns++)
+            using (Graphics g = Graphics.FromImage(bitmap))
             {
-                for (int rows = 0; rows < 100; rows++)
-                {
-                    Color color;
-                    if (columns % 2 == 0)
-                        color = rows % 2 == 0 ? Color.Black : Color.White;
-                    else
-                        color = rows % 2 == 0 ? Color.White : Color.Black;
+                g.FillRectangle(Brushes.White, 0, 0, width, height);
 
-                    for (int j = columns * colWidth; j < (columns * colWidth) + colWidth; j++)
-                    {
-                        for (int k = rows * rowHeight; k < (rows * rowHeight) + rowHeight; k++)
-                        {
-                            checks.SetPixel(j, k, color);
-                        }
-                    }
-                    this.imageViewer.Image = checks;
-                }
+                int centerV = width / 2;
+                int centerH = height / 2;
+
+                for (int x = centerV; x > 0; x -= resX)
+                    g.DrawLine(Pens.Black, x, 0, x, height);
+
+                for (int x = centerV + resX; x < width; x += resX)
+                    g.DrawLine(Pens.Black, x, 0, x, height);
+
+                for (int y = centerH; y > 0; y -= resY)
+                    g.DrawLine(Pens.Black, 0, y, width, y);
+
+                for (int y = centerH + resY; y < height; y += resY)
+                    g.DrawLine(Pens.Black, 0, y, width, y);
+
+                g.DrawLine(Pens.Gray, 0, 0, width, height);
+                g.DrawLine(Pens.Gray, width, 0, 0, height);
+
+                g.DrawEllipse(Pens.Black, centerV - resX, centerH - resY, resX * 2, resY * 2);
+
+                FontFamily fontFamily = new FontFamily("Arial");
+                Font font = new Font(fontFamily, 48, FontStyle.Regular, GraphicsUnit.Pixel);
+
+                g.DrawString(text, font, Brushes.Black, centerV - resX * 2, centerH - resY);
             }
+
+            this.imageViewer.Image = bitmap;
         }
     }
 }

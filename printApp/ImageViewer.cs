@@ -35,6 +35,8 @@ namespace printApp
             get { return image; }
             set
             {
+                if (image != null)
+                    image.Dispose();
                 image = value;
                 UpdateScaleFactor();
                 Invalidate();
@@ -103,11 +105,13 @@ namespace printApp
                 return;
             }
 
-            Matrix mx = new Matrix(zoomFactor, 0, 0, zoomFactor, 0, 0);
-            mx.Translate(this.AutoScrollPosition.X / zoomFactor, this.AutoScrollPosition.Y / zoomFactor);
-            e.Graphics.Transform = mx;
-            e.Graphics.InterpolationMode = interpolationMode;
-            e.Graphics.DrawImage(image, new Rectangle(0, 0, this.image.Width, this.image.Height), 0, 0, image.Width, image.Height, GraphicsUnit.Pixel);
+            using (Matrix mx = new Matrix(zoomFactor, 0, 0, zoomFactor, 0, 0))
+            {
+                mx.Translate(this.AutoScrollPosition.X / zoomFactor, this.AutoScrollPosition.Y / zoomFactor);
+                e.Graphics.Transform = mx;
+                e.Graphics.InterpolationMode = interpolationMode;
+                e.Graphics.DrawImage(image, new Rectangle(0, 0, this.image.Width, this.image.Height), 0, 0, image.Width, image.Height, GraphicsUnit.Pixel);
+            }
             base.OnPaint(e);
         }
     }
