@@ -48,6 +48,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ToolStripRadioButtonMenuItem.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="ImageViewer.cs">
       <SubType>Component</SubType>
     </Compile>

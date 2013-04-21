@@ -48,10 +48,10 @@ namespace printApp
             this.editCreateBitmapLetter600Menu = new System.Windows.Forms.ToolStripMenuItem();
             this.viewMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.viewZoomMenu = new System.Windows.Forms.ToolStripMenuItem();
-            this.viewZoom25Menu = new System.Windows.Forms.ToolStripMenuItem();
-            this.viewZoom50Menu = new System.Windows.Forms.ToolStripMenuItem();
-            this.viewZoom75Menu = new System.Windows.Forms.ToolStripMenuItem();
-            this.viewZoom100Menu = new System.Windows.Forms.ToolStripMenuItem();
+            this.viewZoom25Menu = new printApp.ToolStripRadioButtonMenuItem();
+            this.viewZoom50Menu = new printApp.ToolStripRadioButtonMenuItem();
+            this.viewZoom75Menu = new printApp.ToolStripRadioButtonMenuItem();
+            this.viewZoom100Menu = new printApp.ToolStripRadioButtonMenuItem();
             this.imageViewer = new printApp.ImageViewer();
             this.mainMenu.SuspendLayout();
             this.SuspendLayout();
@@ -188,6 +188,7 @@ namespace printApp
             // 
             // viewZoom25Menu
             // 
+            this.viewZoom25Menu.CheckOnClick = true;
             this.viewZoom25Menu.Name = "viewZoom25Menu";
             this.viewZoom25Menu.Size = new System.Drawing.Size(152, 22);
             this.viewZoom25Menu.Text = "25%";
@@ -195,6 +196,7 @@ namespace printApp
             // 
             // viewZoom50Menu
             // 
+            this.viewZoom50Menu.CheckOnClick = true;
             this.viewZoom50Menu.Name = "viewZoom50Menu";
             this.viewZoom50Menu.Size = new System.Drawing.Size(152, 22);
             this.viewZoom50Menu.Text = "50%";
@@ -202,6 +204,7 @@ namespace printApp
             // 
             // viewZoom75Menu
             // 
+            this.viewZoom75Menu.CheckOnClick = true;
             this.viewZoom75Menu.Name = "viewZoom75Menu";
             this.viewZoom75Menu.Size = new System.Drawing.Size(152, 22);
             this.viewZoom75Menu.Text = "75%";
@@ -209,6 +212,9 @@ namespace printApp
             // 
             // viewZoom100Menu
             // 
+            this.viewZoom100Menu.Checked = true;
+            this.viewZoom100Menu.CheckOnClick = true;
+            this.viewZoom100Menu.CheckState = System.Windows.Forms.CheckState.Checked;
             this.viewZoom100Menu.Name = "viewZoom100Menu";
             this.viewZoom100Menu.Size = new System.Drawing.Size(152, 22);
             this.viewZoom100Menu.Text = "100%";
@@ -261,13 +267,13 @@ namespace printApp
         private System.Windows.Forms.ToolStripMenuItem editCreateBitmapLetter300Menu;
         private System.Windows.Forms.ToolStripMenuItem editCreateBitmapLetter600Menu;
         private System.Windows.Forms.ToolStripMenuItem fileSaveAsMenu;
-        private ImageViewer imageViewer;
         private System.Windows.Forms.ToolStripMenuItem viewMenu;
         private System.Windows.Forms.ToolStripMenuItem viewZoomMenu;
-        private System.Windows.Forms.ToolStripMenuItem viewZoom25Menu;
-        private System.Windows.Forms.ToolStripMenuItem viewZoom50Menu;
-        private System.Windows.Forms.ToolStripMenuItem viewZoom75Menu;
-        private System.Windows.Forms.ToolStripMenuItem viewZoom100Menu;
+        private ToolStripRadioButtonMenuItem viewZoom25Menu;
+        private ToolStripRadioButtonMenuItem viewZoom50Menu;
+        private ToolStripRadioButtonMenuItem viewZoom75Menu;
+        private ToolStripRadioButtonMenuItem viewZoom100Menu;
+        private ImageViewer imageViewer;
     }
 }
 

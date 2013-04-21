@@ -7,7 +7,6 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
-using printApp.Properties;
 
 namespace printApp
 {
@@ -51,9 +50,7 @@ namespace printApp
             set
             {
                 if (value < 0 || value < 1E-05)
-                {
                     value = 1E-05f;
-                }
                 zoomFactor = value;
                 UpdateScaleFactor();
                 Invalidate();
@@ -63,13 +60,9 @@ namespace printApp
         private void UpdateScaleFactor()
         {
             if (image == null)
-            {
                 this.AutoScrollMargin = this.Size;
-            }
             else
-            {
                 this.AutoScrollMinSize = new Size(Convert.ToInt32(this.image.Width * zoomFactor), Convert.ToInt32(this.image.Height * zoomFactor));
-            }
         }
 
         private InterpolationMode interpolationMode = InterpolationMode.High;

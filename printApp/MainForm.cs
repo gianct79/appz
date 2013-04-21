@@ -51,7 +51,8 @@ namespace printApp
         {
             Cursor.Current = Cursors.WaitCursor;
 
-            ToolStripMenuItem selectedMenu = sender as ToolStripMenuItem;
+            ToolStripRadioButtonMenuItem selectedMenu = sender as ToolStripRadioButtonMenuItem;
+            selectedMenu.Checked = true;
 
             if (selectedMenu.Equals(viewZoom25Menu))
             {
