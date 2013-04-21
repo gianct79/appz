@@ -190,7 +190,7 @@ namespace printApp
                 x1 = 0; x2 = ruler.Width; y1 = y2 = ruler.Height / 2;
 
                 g.DrawLine(Pens.Black, x1, y1, x2, y2);
-                g.DrawString("<<< To paper edge", font, Brushes.Black, x1, y1 - resY * 0.12f);
+                g.DrawString("<<< To paper edge <<<", font, Brushes.Black, x1, y1 - resY * 0.12f);
 
                 int resX2 = resX / 2;
                 int resX4 = resX / 4;
@@ -198,12 +198,12 @@ namespace printApp
                 for (int x = x1; x < x2; x++)
                 {
                     if (x % resX4 == 0)
-                        g.DrawLine(Pens.Black, x, y1 - 5, x, y1 + 5);
+                        g.DrawLine(Pens.Black, x, y1 - resY * 0.02f, x, y1 + resY * 0.02f);
                     if (x % resX2 == 0)
-                        g.DrawLine(Pens.Black, x, y1 - 15, x, y1 + 15);
+                        g.DrawLine(Pens.Black, x, y1 - resY * 0.04f, x, y1 + resY * 0.04f);
                     if (x % resX == 0)
                     {
-                        g.DrawLine(Pens.Black, x, y1 - 25, x, y1 + 25);
+                        g.DrawLine(Pens.Black, x, y1 - resY * 0.08f, x, y1 + resY * 0.08f);
                         g.DrawString((x / resX).ToString(), font, Brushes.Black, x, y1);
                     }
                 }
