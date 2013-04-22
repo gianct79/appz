@@ -28,6 +28,8 @@ namespace printApp
         {
             using (PrintDialog printDialog = new PrintDialog())
             {
+                printDialog.UseEXDialog = true; // 64-bit issue?
+
                 if (printDialog.ShowDialog() == DialogResult.OK)
                 {
                     using (PrintDocument printDocument = new PrintDocument())
@@ -53,7 +55,7 @@ namespace printApp
 
         private void printDocument_PrintPage(object sender, PrintPageEventArgs e)
         {
-            e.Graphics.DrawImage(this.imageViewer.Image, e.PageBounds, 0, 0, 
+            e.Graphics.DrawImage(this.imageViewer.Image, e.PageBounds, 0, 0,
                 this.imageViewer.Image.Width, this.imageViewer.Image.Height, GraphicsUnit.Pixel);
 
             //int srcX = e.MarginBounds.X;
