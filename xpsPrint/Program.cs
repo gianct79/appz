@@ -1,6 +1,7 @@
 ﻿/*
 * Copyleft 1979-2013 GTO Inc. All rights reversed.
 */
+
 using System;
 using System.IO;
 using System.Printing;

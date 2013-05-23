@@ -1,4 +1,8 @@
-﻿using System.Reflection;
+﻿/*
+* Copyleft 1979-2013 GTO Inc. All rights reversed.
+*/
+
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
