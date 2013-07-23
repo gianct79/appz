@@ -12,6 +12,8 @@ namespace printApp
 {
     public partial class MainForm : Form
     {
+        UrfDocument urfDocument;
+
         public MainForm()
         {
             InitializeComponent();
@@ -24,8 +26,41 @@ namespace printApp
             this.Close();
         }
 
+        private void fileOpenURFMenu_Click(object sender, EventArgs e)
+        {
+            Cursor.Current = Cursors.WaitCursor;
+
+            this.viewPreviousPageMenu.Enabled = this.viewNextPageMenu.Enabled = false;
+
+            using (OpenFileDialog fileDialog = new OpenFileDialog())
+            {
+                fileDialog.Multiselect = false;
+                fileDialog.ReadOnlyChecked = true;
+                fileDialog.Filter = "Universal Raster Format files (*.urf)|*.urf";
+
+                if (fileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    try
+                    {
+                        urfDocument = new UrfDocument(fileDialog.FileName);
+
+                        this.imageViewer.Image = urfDocument.CreateBitmap();
+                        this.viewNextPageMenu.Enabled = this.urfDocument.CurrentPage < this.urfDocument.PageCount;
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message, this.Text);
+                    }
+                }
+            }
+
+            Cursor.Current = Cursors.Default;
+        }
+
         private void filePrintMenu_Click(object sender, EventArgs e)
         {
+            Cursor.Current = Cursors.WaitCursor;
+
             using (PrintDialog printDialog = new PrintDialog())
             {
                 printDialog.UseEXDialog = true; // 64-bit issue?
@@ -51,6 +86,8 @@ namespace printApp
                     }
                 }
             }
+
+            Cursor.Current = Cursors.Default;
         }
 
         private void printDocument_PrintPage(object sender, PrintPageEventArgs e)
@@ -122,8 +159,33 @@ namespace printApp
             Cursor.Current = Cursors.Default;
         }
 
+        private void viewPageMenu_Click(object sender, EventArgs e)
+        {
+            Cursor.Current = Cursors.WaitCursor;
+
+            ToolStripMenuItem selectedMenu = sender as ToolStripMenuItem;
+
+            if (selectedMenu.Equals(viewPreviousPageMenu))
+            {
+                this.urfDocument.PrevPage();
+                selectedMenu.Enabled = this.urfDocument.CurrentPage > 1;
+            }
+            else if (selectedMenu.Equals(viewNextPageMenu))
+            {
+                this.urfDocument.NextPage();
+                selectedMenu.Enabled = this.urfDocument.CurrentPage < this.urfDocument.PageCount;
+            }
+
+            this.imageViewer.Image = urfDocument.CreateBitmap();
+
+            Cursor.Current = Cursors.Default;
+        }
+
         private void CreateBitmap(string text, int width, int height, int resX, int resY)
         {
+            int resX4 = resX / 4;
+            int resY4 = resY / 4;
+
             Bitmap bitmap = new Bitmap(width, height, PixelFormat.Format32bppArgb);
             bitmap.SetResolution(resX, resY);
 
@@ -134,16 +196,16 @@ namespace printApp
                 int centerV = width / 2;
                 int centerH = height / 2;
 
-                for (int x = centerV; x > 0; x -= resX)
+                for (int x = centerV; x > 0; x -= resX4)
                     g.DrawLine(Pens.Black, x, 0, x, height);
 
-                for (int x = centerV + resX; x < width; x += resX)
+                for (int x = centerV + resX4; x < width; x += resX4)
                     g.DrawLine(Pens.Black, x, 0, x, height);
 
-                for (int y = centerH; y > 0; y -= resY)
+                for (int y = centerH; y > 0; y -= resY4)
                     g.DrawLine(Pens.Black, 0, y, width, y);
 
-                for (int y = centerH + resY; y < height; y += resY)
+                for (int y = centerH + resY4; y < height; y += resY4)
                     g.DrawLine(Pens.Black, 0, y, width, y);
 
                 g.DrawLine(Pens.Gray, 0, 0, width, height);
@@ -212,5 +274,7 @@ namespace printApp
             }
             return ruler;
         }
+
+
     }
 }

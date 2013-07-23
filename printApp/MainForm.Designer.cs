@@ -42,17 +42,21 @@ namespace printApp
             this.fileExitMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.editMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.editCreateBitmapMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.viewMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.viewZoomMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.fileOpenURFMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
+            this.viewPreviousPageMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.imageViewer = new printApp.ImageViewer();
             this.editCreateBitmapA4300Menu = new printApp.ToolStripRadioButtonMenuItem();
             this.editCreateBitmapA4600Menu = new printApp.ToolStripRadioButtonMenuItem();
             this.editCreateBitmapLetter300Menu = new printApp.ToolStripRadioButtonMenuItem();
             this.editCreateBitmapLetter600Menu = new printApp.ToolStripRadioButtonMenuItem();
-            this.viewMenu = new System.Windows.Forms.ToolStripMenuItem();
-            this.viewZoomMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.viewZoom25Menu = new printApp.ToolStripRadioButtonMenuItem();
             this.viewZoom50Menu = new printApp.ToolStripRadioButtonMenuItem();
             this.viewZoom75Menu = new printApp.ToolStripRadioButtonMenuItem();
             this.viewZoom100Menu = new printApp.ToolStripRadioButtonMenuItem();
-            this.imageViewer = new printApp.ImageViewer();
+            this.viewNextPageMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.mainMenu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -71,6 +75,8 @@ namespace printApp
             // fileMenu
             // 
             this.fileMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.fileOpenURFMenu,
+            this.toolStripMenuItem3,
             this.fileSaveMenu,
             this.fileSaveAsMenu,
             this.toolStripMenuItem1,
@@ -84,36 +90,36 @@ namespace printApp
             // fileSaveMenu
             // 
             this.fileSaveMenu.Name = "fileSaveMenu";
-            this.fileSaveMenu.Size = new System.Drawing.Size(125, 22);
+            this.fileSaveMenu.Size = new System.Drawing.Size(154, 22);
             this.fileSaveMenu.Text = "Save";
             // 
             // fileSaveAsMenu
             // 
             this.fileSaveAsMenu.Name = "fileSaveAsMenu";
-            this.fileSaveAsMenu.Size = new System.Drawing.Size(125, 22);
+            this.fileSaveAsMenu.Size = new System.Drawing.Size(154, 22);
             this.fileSaveAsMenu.Text = "Save As...";
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(122, 6);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(151, 6);
             // 
             // filePrintMenu
             // 
             this.filePrintMenu.Name = "filePrintMenu";
-            this.filePrintMenu.Size = new System.Drawing.Size(125, 22);
+            this.filePrintMenu.Size = new System.Drawing.Size(154, 22);
             this.filePrintMenu.Text = "Print...";
             this.filePrintMenu.Click += new System.EventHandler(this.filePrintMenu_Click);
             // 
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(122, 6);
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(151, 6);
             // 
             // fileExitMenu
             // 
             this.fileExitMenu.Name = "fileExitMenu";
-            this.fileExitMenu.Size = new System.Drawing.Size(125, 22);
+            this.fileExitMenu.Size = new System.Drawing.Size(154, 22);
             this.fileExitMenu.Text = "Exit";
             this.fileExitMenu.Click += new System.EventHandler(this.fileExitMenu_Click);
             // 
@@ -133,51 +139,15 @@ namespace printApp
             this.editCreateBitmapLetter300Menu,
             this.editCreateBitmapLetter600Menu});
             this.editCreateBitmapMenu.Name = "editCreateBitmapMenu";
-            this.editCreateBitmapMenu.Size = new System.Drawing.Size(152, 22);
+            this.editCreateBitmapMenu.Size = new System.Drawing.Size(142, 22);
             this.editCreateBitmapMenu.Text = "Create Bitmap";
-            // 
-            // editCreateBitmapA4300Menu
-            // 
-            this.editCreateBitmapA4300Menu.CheckOnClick = true;
-            this.editCreateBitmapA4300Menu.Name = "editCreateBitmapA4300Menu";
-            this.editCreateBitmapA4300Menu.Size = new System.Drawing.Size(152, 22);
-            this.editCreateBitmapA4300Menu.Tag = "0";
-            this.editCreateBitmapA4300Menu.Text = "A4 300 dpi";
-            this.editCreateBitmapA4300Menu.Click += new System.EventHandler(this.editCreateBitmapMenu_Click);
-            // 
-            // editCreateBitmapA4600Menu
-            // 
-            this.editCreateBitmapA4600Menu.CheckOnClick = true;
-            this.editCreateBitmapA4600Menu.Name = "editCreateBitmapA4600Menu";
-            this.editCreateBitmapA4600Menu.Size = new System.Drawing.Size(152, 22);
-            this.editCreateBitmapA4600Menu.Tag = "1";
-            this.editCreateBitmapA4600Menu.Text = "A4 600 dpi";
-            this.editCreateBitmapA4600Menu.Click += new System.EventHandler(this.editCreateBitmapMenu_Click);
-            // 
-            // editCreateBitmapLetter300Menu
-            // 
-            this.editCreateBitmapLetter300Menu.Checked = true;
-            this.editCreateBitmapLetter300Menu.CheckOnClick = true;
-            this.editCreateBitmapLetter300Menu.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.editCreateBitmapLetter300Menu.Name = "editCreateBitmapLetter300Menu";
-            this.editCreateBitmapLetter300Menu.Size = new System.Drawing.Size(152, 22);
-            this.editCreateBitmapLetter300Menu.Tag = "2";
-            this.editCreateBitmapLetter300Menu.Text = "Letter 300 dpi";
-            this.editCreateBitmapLetter300Menu.Click += new System.EventHandler(this.editCreateBitmapMenu_Click);
-            // 
-            // editCreateBitmapLetter600Menu
-            // 
-            this.editCreateBitmapLetter600Menu.CheckOnClick = true;
-            this.editCreateBitmapLetter600Menu.Name = "editCreateBitmapLetter600Menu";
-            this.editCreateBitmapLetter600Menu.Size = new System.Drawing.Size(152, 22);
-            this.editCreateBitmapLetter600Menu.Tag = "3";
-            this.editCreateBitmapLetter600Menu.Text = "Letter 600 dpi";
-            this.editCreateBitmapLetter600Menu.Click += new System.EventHandler(this.editCreateBitmapMenu_Click);
             // 
             // viewMenu
             // 
             this.viewMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.viewZoomMenu});
+            this.viewZoomMenu,
+            this.viewPreviousPageMenu,
+            this.viewNextPageMenu});
             this.viewMenu.Name = "viewMenu";
             this.viewMenu.Size = new System.Drawing.Size(41, 20);
             this.viewMenu.Text = "View";
@@ -190,8 +160,80 @@ namespace printApp
             this.viewZoom75Menu,
             this.viewZoom100Menu});
             this.viewZoomMenu.Name = "viewZoomMenu";
-            this.viewZoomMenu.Size = new System.Drawing.Size(100, 22);
+            this.viewZoomMenu.Size = new System.Drawing.Size(152, 22);
             this.viewZoomMenu.Text = "Zoom";
+            // 
+            // fileOpenURFMenu
+            // 
+            this.fileOpenURFMenu.Name = "fileOpenURFMenu";
+            this.fileOpenURFMenu.Size = new System.Drawing.Size(154, 22);
+            this.fileOpenURFMenu.Text = "Open URF File...";
+            this.fileOpenURFMenu.Click += new System.EventHandler(this.fileOpenURFMenu_Click);
+            // 
+            // toolStripMenuItem3
+            // 
+            this.toolStripMenuItem3.Name = "toolStripMenuItem3";
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(151, 6);
+            // 
+            // viewPreviousPageMenu
+            // 
+            this.viewPreviousPageMenu.Enabled = false;
+            this.viewPreviousPageMenu.Name = "viewPreviousPageMenu";
+            this.viewPreviousPageMenu.Size = new System.Drawing.Size(152, 22);
+            this.viewPreviousPageMenu.Text = "Previous Page";
+            this.viewPreviousPageMenu.Click += new System.EventHandler(this.viewPageMenu_Click);
+            // 
+            // imageViewer
+            // 
+            this.imageViewer.AutoScroll = true;
+            this.imageViewer.AutoScrollMargin = new System.Drawing.Size(493, 376);
+            this.imageViewer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.imageViewer.Image = null;
+            this.imageViewer.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.High;
+            this.imageViewer.Location = new System.Drawing.Point(0, 24);
+            this.imageViewer.Name = "imageViewer";
+            this.imageViewer.Size = new System.Drawing.Size(493, 376);
+            this.imageViewer.TabIndex = 2;
+            this.imageViewer.Text = "imageViewer";
+            this.imageViewer.ZoomFactor = 0.25F;
+            // 
+            // editCreateBitmapA4300Menu
+            // 
+            this.editCreateBitmapA4300Menu.CheckOnClick = true;
+            this.editCreateBitmapA4300Menu.Name = "editCreateBitmapA4300Menu";
+            this.editCreateBitmapA4300Menu.Size = new System.Drawing.Size(141, 22);
+            this.editCreateBitmapA4300Menu.Tag = "0";
+            this.editCreateBitmapA4300Menu.Text = "A4 300 dpi";
+            this.editCreateBitmapA4300Menu.Click += new System.EventHandler(this.editCreateBitmapMenu_Click);
+            // 
+            // editCreateBitmapA4600Menu
+            // 
+            this.editCreateBitmapA4600Menu.CheckOnClick = true;
+            this.editCreateBitmapA4600Menu.Name = "editCreateBitmapA4600Menu";
+            this.editCreateBitmapA4600Menu.Size = new System.Drawing.Size(141, 22);
+            this.editCreateBitmapA4600Menu.Tag = "1";
+            this.editCreateBitmapA4600Menu.Text = "A4 600 dpi";
+            this.editCreateBitmapA4600Menu.Click += new System.EventHandler(this.editCreateBitmapMenu_Click);
+            // 
+            // editCreateBitmapLetter300Menu
+            // 
+            this.editCreateBitmapLetter300Menu.Checked = true;
+            this.editCreateBitmapLetter300Menu.CheckOnClick = true;
+            this.editCreateBitmapLetter300Menu.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.editCreateBitmapLetter300Menu.Name = "editCreateBitmapLetter300Menu";
+            this.editCreateBitmapLetter300Menu.Size = new System.Drawing.Size(141, 22);
+            this.editCreateBitmapLetter300Menu.Tag = "2";
+            this.editCreateBitmapLetter300Menu.Text = "Letter 300 dpi";
+            this.editCreateBitmapLetter300Menu.Click += new System.EventHandler(this.editCreateBitmapMenu_Click);
+            // 
+            // editCreateBitmapLetter600Menu
+            // 
+            this.editCreateBitmapLetter600Menu.CheckOnClick = true;
+            this.editCreateBitmapLetter600Menu.Name = "editCreateBitmapLetter600Menu";
+            this.editCreateBitmapLetter600Menu.Size = new System.Drawing.Size(141, 22);
+            this.editCreateBitmapLetter600Menu.Tag = "3";
+            this.editCreateBitmapLetter600Menu.Text = "Letter 600 dpi";
+            this.editCreateBitmapLetter600Menu.Click += new System.EventHandler(this.editCreateBitmapMenu_Click);
             // 
             // viewZoom25Menu
             // 
@@ -227,19 +269,12 @@ namespace printApp
             this.viewZoom100Menu.Text = "100%";
             this.viewZoom100Menu.Click += new System.EventHandler(this.viewZoomMenu_Click);
             // 
-            // imageViewer
+            // viewNextPageMenu
             // 
-            this.imageViewer.AutoScroll = true;
-            this.imageViewer.AutoScrollMargin = new System.Drawing.Size(493, 376);
-            this.imageViewer.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.imageViewer.Image = null;
-            this.imageViewer.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.High;
-            this.imageViewer.Location = new System.Drawing.Point(0, 24);
-            this.imageViewer.Name = "imageViewer";
-            this.imageViewer.Size = new System.Drawing.Size(493, 376);
-            this.imageViewer.TabIndex = 2;
-            this.imageViewer.Text = "imageViewer";
-            this.imageViewer.ZoomFactor = 0.25F;
+            this.viewNextPageMenu.Enabled = false;
+            this.viewNextPageMenu.Name = "viewNextPageMenu";
+            this.viewNextPageMenu.Size = new System.Drawing.Size(152, 22);
+            this.viewNextPageMenu.Text = "Next Page";
             // 
             // MainForm
             // 
@@ -281,6 +316,10 @@ namespace printApp
         private ToolStripRadioButtonMenuItem viewZoom75Menu;
         private ToolStripRadioButtonMenuItem viewZoom100Menu;
         private ImageViewer imageViewer;
+        private System.Windows.Forms.ToolStripMenuItem fileOpenURFMenu;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem3;
+        private System.Windows.Forms.ToolStripMenuItem viewPreviousPageMenu;
+        private System.Windows.Forms.ToolStripMenuItem viewNextPageMenu;
     }
 }
 
