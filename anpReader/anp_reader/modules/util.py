@@ -11,6 +11,11 @@ def remove_punctuation(text):
     return text.translate(tbl).strip()
 
 
+def remove_accents(text):
+    nkfd_form = unicodedata.normalize('NFKD', text)
+    return u''.join([c for c in nkfd_form if not unicodedata.combining(c)])
+
+
 def count_weeks(from_date=date.today()):
     d0 = date(1999, 7, 1)
     delta = from_date - d0

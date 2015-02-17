@@ -2,13 +2,13 @@
 
 import argparse
 import os
-
-import jsonpickle
+import tempfile
+import json
 
 from anp_reader import __version__, __description__, log
 from anp_reader.modules.price import PriceController
-from anp_reader.modules.product import FuelType
-from modules.retailer import RetailerController, Retailer
+from anp_reader.modules.product import FUEL_TYPES
+from modules.retailer import RetailerController
 
 
 def main():
@@ -31,47 +31,33 @@ def main():
     args = parser.parse_args()
     state_set = set(args.state)
 
-    base_dir = '/home/giancarlo/Workspace/anp_reader/data/retailer'
-
     if args.retailer:
         retailer_ctrl = RetailerController()
 
-        # fuel_set = set(map(lambda x: x[0], FuelType.types.values()))
-        fuel_set = [FuelType.types['GASOLINA_PRM'][0]]
+        # fuel_set = set(map(lambda x: x[0], FUEL_TYPES.values()))
+        fuel_set = [FUEL_TYPES['GASOLINA_PRM'][0]]
 
         file_set = retailer_ctrl.download_data(state_set, fuel_set)
-        # file_set = retailer_ctrl.download_data(['0'], ['0'])
         cnpj_set = retailer_ctrl.extract_cnpj(file_set)
-        # cnpj_set = ['93489243002917']
         file_set = retailer_ctrl.download_cnpj(cnpj_set)
-        # file_set = ['/tmp/93489243002917']
-        retailer_set = retailer_ctrl.process_cnpj(file_set)
+        retailer_map = retailer_ctrl.process_cnpj(file_set)
 
-        retailer_ctrl.process_address_and_save(retailer_set, os.path.join(base_dir, args.state[0] + '.json'))
+        retailer_ctrl.process_address_and_save(retailer_map)
 
     if args.price:
         price_ctrl = PriceController()
 
-        fuel_set = set(map(lambda x: x[1], FuelType.types.values()))
+        # fuel_set = set(map(lambda x: x[1], FUEL_TYPES.values()))
+        fuel_set = [FUEL_TYPES['GASOLINA_COM'][1]]
 
-        file_set = price_ctrl.download_state_data(state_set, fuel_set)
-        city_set = price_ctrl.process_state_data(file_set)
-        file_set = price_ctrl.download_city_data(city_set, fuel_set)
+        price_ctrl.process_state_data_and_save(state_set, fuel_set)
 
-        # base_dir = '/home/giancarlo/Workspace/anp_reader/tests/city'
-        # file_set = []
-        # for f in os.listdir(base_dir):
-        # file_set.append(os.path.join(base_dir, f))
+    filename = os.path.join(tempfile.tempdir, 'retailer.json')
+    with open(filename, 'r') as infile:
+        data = json.load(infile)
+        log.info(data)
 
-        price_set = price_ctrl.process_city_data(file_set)
-
-        for price in price_set:
-            log.info(price)
-
-    # datafile = os.path.join(base_dir, args.state[0] + '.json')
-
-    # with open(datafile, 'r') as infile:
-    # data = jsonpickle.decode(infile.read())
-    #    log.info(data)
-
-
+    filename = os.path.join(tempfile.tempdir, 'price.json')
+    with open(filename, 'r') as infile:
+        data = json.load(infile)
+        log.info(data)

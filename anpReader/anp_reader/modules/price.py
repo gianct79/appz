@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 import os
 import tempfile
+import json
 
 from bs4 import BeautifulSoup
 import requests
 
-from anp_reader.modules.util import count_weeks
+from anp_reader.modules.util import count_weeks, remove_accents
 
 
 class PriceController():
@@ -13,8 +14,8 @@ class PriceController():
         pass
 
     @staticmethod
-    def download_state_data(state_set, fuel_set):
-        file_set = []
+    def process_state_data_and_save(state_set, fuel_set):
+        city_map = dict()
         week_idx = count_weeks()
         for state in state_set:
             for fuel in fuel_set:
@@ -41,69 +42,21 @@ class PriceController():
                     with open(filename, 'wb') as fd:
                         for chunk in r.iter_content(8192):
                             fd.write(chunk)
-                file_set.append(filename)
 
-        return file_set
+                    html_dom = BeautifulSoup(open(filename))
+                    city_dom = html_dom.find('table')
 
-    @staticmethod
-    def download_city_data(city_set, fuel_set):
-        file_set = []
-        week_idx = count_weeks()
-        for city in city_set:
-            for fuel in fuel_set:
-                headers = {'User-Agent': 'Mozilla/4.0 (compatible; MSIE 5.5; Windows NT)',
-                           'Origin': 'http://www.anp.gov.br',
-                           'Content-Type': 'application/x-www-form-urlencoded',
-                           'Accept-Encoding': 'gzip, deflate',
-                           'Cache-Control': 'max-age=0',
-                           'Connection:': 'keep-alive',
-                           'Accept': 'text/html',
-                           'Referer': 'http://www.anp.gov.br/preco/prc/Resumo_Por_Estado_Municipio.asp'}
-                values = {'selSemana': str(week_idx) + '*GAA',
-                          'desc_Semana': 'GAA',
-                          'cod_semana': str(week_idx),
-                          'tipo': '1',
-                          'cod_combustivel': str(fuel),
-                          'desc_combustivel': 'GAA',
-                          'selMunicipio': city}
+                    if city_dom:
+                        for row_dom in city_dom.find_all('tr')[3:]:
+                            city = remove_accents(row_dom.contents[0].text.strip().upper() + '/'
+                                                  + state.strip().upper())
+                            price_info = {str(fuel): {
+                                'price': float(row_dom.contents[2].text.strip().replace(',', '.')),
+                                'price_min': float(row_dom.contents[4].text.strip().replace(',', '.')),
+                                'price_max': float(row_dom.contents[5].text.strip().replace(',', '.'))
+                            }}
+                            city_map[city] = price_info
 
-                r = requests.get('http://www.anp.gov.br/preco/prc/Resumo_Semanal_Posto.asp', data=values,
-                                 headers=headers, stream=True)
-                if r.status_code == requests.codes.ok:
-                    filename = os.path.join(tempfile.tempdir, city + '_' + str(fuel))
-                    with open(filename, 'wb') as fd:
-                        for chunk in r.iter_content(8192):
-                            fd.write(chunk)
-                file_set.append(filename)
-
-        return file_set
-
-    @staticmethod
-    def process_state_data(file_set):
-        city_set = set()
-        for path in file_set:
-            html_dom = BeautifulSoup(open(path))
-            city_dom = html_dom.find('table')
-
-            if city_dom:
-                for row_dom in city_dom.find_all('tr')[3:]:
-                    link = row_dom.contents[0].contents[0].attrs['href']
-                    city_info = link[link.find('\'') + 1:-3]
-                    city_set.add(city_info)
-        return city_set
-
-    @staticmethod
-    def process_city_data(file_set):
-        price_list = []
-        for path in file_set:
-            html_dom = BeautifulSoup(open(path))
-            retailer_dom = html_dom.find('table')
-
-            if retailer_dom:
-                for row_dom in retailer_dom.find_all('tr')[2:]:
-                    ret_info = dict()
-                    ret_info['name'] = row_dom.contents[0].text.upper()
-                    ret_info['brand'] = row_dom.contents[3].text.upper()
-                    ret_info['sale'] = row_dom.contents[4].text
-                    price_list.append(ret_info)
-        return price_list
+        filename = os.path.join(tempfile.tempdir, 'price.json')
+        with open(filename, 'w') as outfile:
+            json.dump(city_map, outfile)

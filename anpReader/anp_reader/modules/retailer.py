@@ -1,35 +1,12 @@
 # -*- coding: utf-8 -*-
 import os
 import tempfile
-
+import json
 
 from bs4 import BeautifulSoup
-import jsonpickle
 import requests
 
-from anp_reader.modules.util import remove_punctuation
-
-
-class Retailer(object):
-    def __init__(self, cnpj, company_name, address, address_ex, city, zip, brand):
-        self.cnpj = remove_punctuation(cnpj)
-        self.company_name = company_name.strip().upper()
-        self.address = address.strip().upper()
-        address_ex = address_ex.strip()
-        if address_ex:
-            self.address += ' ' + address_ex.upper()
-        self.city = city.strip().upper()
-        self.zip = zip.strip()
-        self.brand = brand.strip().upper()
-
-    def __eq__(self, other):
-        return other and self.cnpj == other.cnpj
-
-    def __ne__(self, other):
-        return not self.__eq__(other)
-
-    def __hash__(self):
-        return hash(self.cnpj)
+from anp_reader.modules.util import remove_punctuation, remove_accents
 
 
 class RetailerController():
@@ -77,7 +54,7 @@ class RetailerController():
 
     @staticmethod
     def extract_cnpj(file_set):
-        retailer_set = set()
+        cnpj_set = set()
         for path in file_set:
             html_dom = BeautifulSoup(open(path))
             station_dom = html_dom.find_all('table')[1]
@@ -85,9 +62,9 @@ class RetailerController():
             if station_dom:
                 for row_dom in station_dom.find_all('tr')[1:]:
                     cnpj = remove_punctuation(row_dom.contents[4].text)
-                    retailer_set.add(cnpj)
+                    cnpj_set.add(cnpj)
 
-        return retailer_set
+        return cnpj_set
 
     @staticmethod
     def download_cnpj(cnpj_set):
@@ -141,38 +118,46 @@ class RetailerController():
 
     @staticmethod
     def process_cnpj(file_set):
-        retailer_set = set()
+        retailer_map = dict()
         for path in file_set:
             html_dom = BeautifulSoup(open(path))
             retailer_dom = html_dom.find_all('table')[3]
 
             if retailer_dom:
                 row_dom = retailer_dom.find_all('tr')[4:15]
-                retailer = Retailer(row_dom[0].contents[3].text,
-                                    row_dom[1].contents[2].text,
-                                    row_dom[3].contents[2].text,
-                                    row_dom[4].contents[2].text,
-                                    row_dom[6].contents[2].text,
-                                    row_dom[7].contents[2].text,
-                                    row_dom[10].contents[2].text)
-                retailer_set.add(retailer)
 
-        return retailer_set
+                cnpj = remove_punctuation(row_dom[0].contents[3].text)
+                address = row_dom[3].contents[2].text.strip()
+                address_ex = row_dom[4].contents[2].text.strip()
+                if address_ex:
+                    address += ' ' + address_ex
+
+                retailer_info = {
+                    'company_name': row_dom[1].contents[2].text.strip().upper(),
+                    'address': address.upper(),
+                    'city': remove_accents(row_dom[6].contents[2].text.strip().upper()),
+                    'zip': row_dom[7].contents[2].text.strip().upper(),
+                    'brand': row_dom[10].contents[2].text.strip().upper()
+                }
+                retailer_map[cnpj] = retailer_info
+
+        return retailer_map
 
     @staticmethod
-    def process_address_and_save(retailer_set, filename):
-        for retailer in retailer_set:
+    def process_address_and_save(retailer_map):
+        for cnpj, retailer in retailer_map.iteritems():
             headers = {'User-Agent': 'Mozilla/4.0 (compatible; MSIE 5.5; Windows NT)',
                        'Accept-Language': 'pt-BR'}
-            full_address = retailer.address + ', ' + retailer.city + ', ' + ', BRASIL'
+            full_address = retailer['address'] + ', ' + retailer['city'] + ', ' + ', BRASIL'
             url = 'https://maps.googleapis.com/maps/api/geocode/json?address=%s&sensor=false' % full_address
 
             r = requests.get(url, headers=headers)
             if r.status_code == requests.codes.ok:
                 address = r.json()
                 if address['status'] == 'OK':
-                    setattr(retailer, 'location', address['results'][0]['geometry']['location'])
-                    setattr(retailer, 'formatted_address', address['results'][0]['formatted_address'])
+                    retailer['location'] = address['results'][0]['geometry']['location']
+                    retailer['formatted_address'] = address['results'][0]['formatted_address']
 
+        filename = os.path.join(tempfile.tempdir, 'retailer.json')
         with open(filename, 'w') as outfile:
-            outfile.write(jsonpickle.encode(retailer_set, unpicklable=False))
+            json.dump(retailer_map, outfile)
