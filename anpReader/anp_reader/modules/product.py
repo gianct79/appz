@@ -1,12 +1,18 @@
 # -*- coding: utf-8 -*-
 
-FUEL_TYPES = {'ALCOOL_ADT': (810101002, None),
-              'ALCOOL_COM': (810101001, 643),
-              'GASOLINA_ADT': (320102002, None),
-              'GASOLINA_COM': (320102001, 487),
-              'GASOLINA_PRM': (320102003, None),
-              'GNV': (220101005, 476),
-              'DIESEL_S10_ADT': (820101033, None),
-              'DIESEL_S10_COM': (820101034, 812),
-              'DIESEL_S500_ADT': (820101013, None),
-              'DIESEL_S500_COM': (820101012, 532)}
+PRODUCT_TYPES = {u'ETANOL HIDRATADO ADITIVADO': (810101002, None),
+                 u'ETANOL HIDRATADO COMUM': (810101001, 643),
+                 u'GASOLINA C ADITIVADA': (320102002, None),
+                 u'GASOLINA C COMUM': (320102001, 487),
+                 u'GASOLINA C PREMIUM': (320102003, None),
+                 u'GAS NATURAL VEICULAR': (220101005, 476),
+                 u'OLEO DIESEL B S10 - ADITIVADO': (820101033, None),
+                 u'OLEO DIESEL B S10 - COMUM': (820101034, 812),
+                 u'OLEO DIESEL B S500 - ADITIVADO': (820101013, None),
+                 u'OLEO DIESEL B S500 - COMUM': (820101012, 532)}
+
+ANP_CODES = {643: 810101001,
+             487: 320102001,
+             476: 220101005,
+             812: 820101034,
+             532: 820101012}

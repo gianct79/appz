@@ -6,6 +6,7 @@ import json
 from bs4 import BeautifulSoup
 import requests
 
+from anp_reader.modules.product import PRODUCT_TYPES
 from anp_reader.modules.util import remove_punctuation, remove_accents
 
 
@@ -14,10 +15,11 @@ class RetailerController():
         pass
 
     @staticmethod
-    def download_data(state_set, fuel_set):
+    def download_data(state_set, product_set):
         file_set = []
         for state in state_set:
-            for fuel in fuel_set:
+            state = state.upper()
+            for product in product_set:
                 headers = {'User-Agent': 'Mozilla/4.0 (compatible; MSIE 5.5; Windows NT)',
                            'Origin': 'http://www.anp.gov.br',
                            'Content-Type': 'application/x-www-form-urlencoded',
@@ -25,7 +27,7 @@ class RetailerController():
                            'Cache-Control': 'max-age=0',
                            'Connection:': 'keep-alive',
                            'Accept': 'text/html'}
-                product = str(fuel)
+                product = str(product)
                 values = {'sCnpj': '',
                           'sRazaoSocial': '',
                           'sEstado': state,
@@ -124,7 +126,7 @@ class RetailerController():
             retailer_dom = html_dom.find_all('table')[3]
 
             if retailer_dom:
-                row_dom = retailer_dom.find_all('tr')[4:15]
+                row_dom = retailer_dom.find_all('tr')[4:-3]
 
                 cnpj = remove_punctuation(row_dom[0].contents[3].text)
                 address = row_dom[3].contents[2].text.strip()
@@ -139,6 +141,14 @@ class RetailerController():
                     'zip': row_dom[7].contents[2].text.strip().upper(),
                     'brand': row_dom[10].contents[2].text.strip().upper()
                 }
+
+                product_info = []
+                for product_row in row_dom[14:]:
+                    product = remove_accents(product_row.contents[1].text.strip().upper())
+                    if product in PRODUCT_TYPES:
+                        product_info.append(PRODUCT_TYPES[product][0])
+
+                retailer_info['products'] = product_info
                 retailer_map[cnpj] = retailer_info
 
         return retailer_map
