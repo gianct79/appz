@@ -1,0 +1,116 @@
+
+<HTML>
+<head>
+	<title>:: ANP - Agência Nacional de Petróleo ::</title>
+	<!--
+	<link rel="STYLESHEET" type="text/css" href="/css/default.css">
+	-->
+	<style type="text/css">
+		@import "/SITE/extras/css/default.css";
+	</style>
+	<META http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+	<meta http-equiv=pragma content=no-cache>
+	<meta http-equiv=expires content="Mon, 06 Jan 1990 00:00:01 GMT">
+</head>
+
+<script language="JAVASCRIPT">
+function ShowHours() 
+{
+    TodaysHour = new Date()
+	horas = TodaysHour.getHours()
+	minutos = TodaysHour.getMinutes()
+	segundos = TodaysHour.getSeconds()
+	if (horas < 10)
+		horas= "0" + horas
+
+	if (minutos < 10)
+		minutos = "0" + minutos
+
+	if (segundos < 10)
+		segundos = "0" + segundos
+	
+    document.write(horas+":"+minutos+":"+segundos)
+}
+
+function ShowTodayDate() 
+{
+	now = new Date()
+	dia = now.getDate()
+	mes = now.getMonth() + 1
+	ano = now.getYear()
+
+	if (dia < 10)
+		dia = "0" + dia
+	if (mes < 10)
+		mes = "0" + mes
+	if (ano < 2000)
+		ano = "19" + ano
+
+        if (navigator.appName == "Netscape") 
+        {
+             if (ano > 1999)  
+             ano = "200" + (now.getYear()-100)  
+ 	    }
+        if (navigator.appName == "Netscape") 
+        {
+             if (ano > 2009) 
+	     ano = "20" + (now.getYear()-100)  
+	     }
+	document.write(dia+"/" +mes+ "/" +ano)
+}
+</script>
+
+<body leftmargin=0 topmargin=0 marginheight="0" marginwidth="0" bgcolor="#ffffff">
+<!-- tabela moldura principal -->
+
+<table width="760" border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="126" bgcolor="#D7D7D7" valign="top">&nbsp;</td>
+<td valign="top" width="634">
+
+<!-- fim da tabela moldura principal e inicio do corpo do consulta de postos -->
+		<TABLE>
+        <!--span class="txtcinza2"><b>Data:</b> <script language="javascript">ShowTodayDate();</script>&nbsp;&nbsp; <b>Hora:</b> <script language="javascript">ShowHours();</script></span-->
+        <span class="txtcinza2"><b>Data:</b> 17/02/2015&nbsp;&nbsp; <b>Hora:</b> 14:45:20</span>
+
+</TABLE>
+
+    <!--include virtual="/postos/resultadoquery.asp"-->
+    
+	<TABLE height=530 cols=1 width=634  border=0>
+	  <TBODY>
+	  <TR>
+	    <TD height=121 valign="top" align="left">
+	        <DIV align=left>
+	        <table border="0" width=634 cellspacing="3">
+	        <tr><td colspan=2 align=right><font face="Arial" size="2"><b><a href="consulta.asp">Nova Consulta</a></b></font></td></tr>
+	
+	   <tr><td bgcolor=#e7e7e7 colspan=2><font face=verdana color=#666666 size=3><div align="left"><b>Posto com cadastro atualizado</FONT></b></br></tr></td>
+	   <tr><td colspan=2><font face=verdana color=#666666 size=1><br><div align="justify">Agente regulado pela Resolução ANP nº 41/2013, que caracteriza-se pelo exercício da atividade de revenda a varejo de combustíveis automotivos em seu próprio estabelecimento. Os combustíveis comercializados por este agente deverão ser adquiridos de empresas devidamente autorizadas pela ANP ao exercício da atividade de distribuição de combustíveis líquidos derivados de petróleo, álcool combustível e outros combustíveis automotivos.</FONT></br>
+	   <font face=verdana color=#666666 size=1 bgcolor=#d7d7d7 color=red>Caso deseje emitir o certificado, <b><a href="certificado.asp?">clique aqui.</a></b></font><br>
+	   <font face=Verdana color=#666666 size=1> </a></font>
+	   <font face=Verdana color=#666666 size=1>Caso deseje verificar a autenticidade de Certificado já emitido para este posto, <b><a href="CertificadoConfirmacao.asp?">clique aqui.</a></b></font><br>&nbsp;</td></tr>
+	   <tr><td align=right bgcolor=#e7e7e7 valign=top><font face=Verdana color=#666666 size=1><b>Autorização:</b></font></td>            <td valign=top align=left bgcolor=#e7e7e7><font face=Verdana color=#666666 size=1>PR/SP0147302</font></td></tr><tr> <td align=right bgcolor=#d7d7d7 valign=top><font face=Verdana color=#666666 size=1><b>CNPJ/CPF:</b></font></td>            <td valign=top align=left bgcolor=#d7d7d7><font face=Verdana color=#666666 size=1>19.011.150/0001-29</font></td></tr><tr><td align=right bgcolor=#e7e7e7 valign=top><font face=Verdana color=#666666 size=1><b>Razão Social:</b></font></td>            <td valign=top align=left bgcolor=#e7e7e7><font face=Verdana color=#666666 size=1>AUTO POSTO GOLFO DO MÉXICO LTDA</font></td></tr><tr><td align=right bgcolor=#d7d7d7 valign=top><font face=Verdana color=#666666 size=1><b>Nome Fantasia:</b></font></td>            <td valign=top align=left bgcolor=#d7d7d7><font face=Verdana color=#666666 size=1>MÉXICO</font></td></tr><tr><td align=right bgcolor=#e7e7e7 valign=top><font face=Verdana color=#666666 size=1><b>Endereço:</b></font></td>            <td valign=top align=left bgcolor=#e7e7e7><font face=Verdana color=#666666 size=1>  AVENIDA ARICANDUVA  4002&nbsp;</font></td></tr><tr><td align=right bgcolor=#d7d7d7 valign=top><font face=Verdana color=#666666 size=1><b>Complemento:</b></font></td>            <td valign=top align=left bgcolor=#d7d7d7><font face=Verdana color=#666666 size=1>&nbsp;</font></td></tr><tr><td align=right bgcolor=#e7e7e7 valign=top><font face=Verdana color=#666666 size=1><b>Bairro:</b></font></td>            <td valign=top align=left bgcolor=#e7e7e7><font face=Verdana color=#666666 size=1>VILA CALIFORNIA&nbsp;</font></td></tr><tr><td align=right bgcolor=#d7d7d7 valign=top><font face=Verdana color=#666666 size=1><b>Município/UF:</b></font></td>            <td valign=top align=left bgcolor=#d7d7d7><font face=Verdana color=#666666 size=1>SAO PAULO/SP&nbsp;</font></td></tr><tr><td align=right bgcolor=#e7e7e7 valign=top><font face=Verdana color=#666666 size=1><b>CEP:</b></font></td>            <td valign=top align=left bgcolor=#e7e7e7><font face=Verdana color=#666666 size=1>3490000&nbsp;</font></td></tr><tr><td align=right bgcolor=#d7d7d7 valign=top><font face=Verdana color=#666666 size=1><b>Número Despacho:</b></font></td>            <td valign=top align=left bgcolor=#d7d7d7><font face=Verdana color=#666666 size=1>ANP Nº 1386&nbsp;</font></td></tr><tr><td align=right bgcolor=#e7e7e7 valign=top><font face=Verdana color=#666666 size=1><b>Data Publicação:</b></font></td>            <td valign=top align=left bgcolor=#e7e7e7><font face=Verdana color=#666666 size=1>19/11/2013&nbsp;</font></td></tr><tr><td align=right bgcolor=#d7d7d7 valign=top><font face=Verdana color=#666666 size=1><b>Bandeira:</b></font></td>            <td valign=top align=left bgcolor=#d7d7d7><font face=Verdana color=#666666 size=1>PETROBRAS DISTRIBUIDORA S.A.</font></td></tr><tr><td align=right bgcolor=#e7e7e7 valign=top><font face=Verdana color=#666666 size=1><b>Tipo do Posto:</b></font></td>            <td valign=top align=left bgcolor=#e7e7e7><font face=Verdana color=#666666 size=1>REVENDEDOR&nbsp;</font></td>
+			 </tr><table  cols=2 border=0  width=644 cellspacing="3">
+			 <tr><td  colspan=3 align=center bgcolor=#e7e7e7 valign=top><font face=Verdana color=#666666 size=1><b>Equipamentos:</b></font></td><td></td><td></td></tr><tr><Div> <td  width =450 valign=top align=left bgcolor=#d7d7d7 ><font face=Verdana color=#666666 size=1><b>Produtos:</b></font></td><td width =103 valign=top align=center bgcolor=#d7d7d7 ><font face=Verdana color=#666666 size=1><b>Tancagem (m³):</b></font></td><td  width =92 valign=top align=center bgcolor=#d7d7d7 ><font face=Verdana color=#666666 size=1><b>Bicos:</b></font></td></Div></tr><tr>            <td heigth=121 width=450 valign=top align=left bgcolor=#e7e7e7 ><font face=Verdana color=#666666 size=1>GASOLINA C PREMIUM</font></td>            <td heigth=121 width=103 valign=top align=center bgcolor=#e7e7e7 ><font face=Verdana color=#666666 size=1>15</font></td>            <td heigth=121 width=92 valign=top align=center bgcolor=#e7e7e7 ><font face=Verdana color=#666666 size=1>8</font></td></tr><tr>            <td heigth=121 width=450 valign=top align=left bgcolor=#d7d7d7 ><font face=Verdana color=#666666 size=1>GASOLINA C ADITIVADA</font></td>            <td heigth=121 width=103 valign=top align=center bgcolor=#d7d7d7 ><font face=Verdana color=#666666 size=1>30</b></font></td>            <td heigth=121 width=92 valign=top align=center bgcolor=#d7d7d7 ><font face=Verdana color=#666666 size=1>8</font></td></tr><tr>            <td heigth=121 width=450 valign=top align=left bgcolor=#e7e7e7 ><font face=Verdana color=#666666 size=1>GASOLINA C COMUM</font></td>            <td heigth=121 width=103 valign=top align=center bgcolor=#e7e7e7 ><font face=Verdana color=#666666 size=1>45</font></td>            <td heigth=121 width=92 valign=top align=center bgcolor=#e7e7e7 ><font face=Verdana color=#666666 size=1>8</font></td></tr><tr>            <td heigth=121 width=450 valign=top align=left bgcolor=#d7d7d7 ><font face=Verdana color=#666666 size=1>ETANOL HIDRATADO COMUM</font></td>            <td heigth=121 width=103 valign=top align=center bgcolor=#d7d7d7 ><font face=Verdana color=#666666 size=1>30</b></font></td>            <td heigth=121 width=92 valign=top align=center bgcolor=#d7d7d7 ><font face=Verdana color=#666666 size=1>8</font></td></tr><tr>	
+			 </tr></table><table colspan =2 cols=1 width=634  border=0 cellspacing="3"> <tr>
+			 		<!--</ul>&nbsp;</td></tr></table><DIV align=left><table border=0 cellspacing=3 width=100>-->
+       
+       </ul>&nbsp;</td></tr></table><DIV align=left><table border=0 cellspacing=3 width=280>
+                   <tr><td valign=top align=left bgcolor=#FFFFFF><font face=Verdana color=#666666 size=1>&nbsp;</font></td></tr>
+       </table>
+       </DIV></BLOCKQUOTE></TD></TR>
+       </TBODY></TABLE>
+    
+
+<!-- fim  do corpo do consulta de postos -->
+<!-- termino da tabela moldura principal -->
+</td>
+</tr>
+<tr>
+<td colspan="2">&nbsp;</td>
+</tr>
+</table>
+<!-- fim tabela moldura principal -->
+
+</BODY></HTML>
