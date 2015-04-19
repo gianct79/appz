@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Database Name="SomSC" EntityNamespace="Com.Gt.SomSc.Domain.Entities" ContextNamespace="Com.Gt.SomSc.Domain.Entities" Class="SomScDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Table Name="CATEGORIAS" Member="Categorias">
+    <Type Name="Categoria">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Descricao" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Association Name="Categoria_CategoriasTags" Member="CategoriasTags" Storage="_CATEGORIAS_TAGS" ThisKey="Id" OtherKey="IdCategoria" Type="CategoriasTags" />
+      <Association Name="Categoria_Produto" Member="Produtos" Storage="_PRODUTOS" ThisKey="Id" OtherKey="IdCategoria" Type="Produto" />
+    </Type>
+  </Table>
+  <Table Name="CATEGORIAS_TAGS" Member="CategoriasTags">
+    <Type Name="CategoriasTags">
+      <Column Name="IdCategoria" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="IdTag" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Valor" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Association Name="Categoria_CategoriasTags" Member="Categoria" Storage="_CATEGORIAS" ThisKey="IdCategoria" OtherKey="Id" Type="Categoria" IsForeignKey="true" DeleteOnNull="true" />
+      <Association Name="Tag_CategoriasTags" Member="Tag" Storage="_TAGS" ThisKey="IdTag" OtherKey="Id" Type="Tag" IsForeignKey="true" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="FILIAIS" Member="Filiais">
+    <Type Name="Filial">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Nome" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Association Name="Filial_Movimento" Member="Movimentos" Storage="_MOVIMENTOS" ThisKey="Id" OtherKey="IdFilial" Type="Movimento" />
+    </Type>
+  </Table>
+  <Table Name="FORNECEDORES" Member="Fornecedores">
+    <Type Name="Fornecedor">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="RazaoSocial" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="Ativo" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Association Name="Fornecedor_Produto" Member="Produtos" Storage="_PRODUTOS" ThisKey="Id" OtherKey="IdFornecedor" Type="Produto" />
+    </Type>
+  </Table>
+  <Table Name="MOVIMENTOS" Member="Movimentos">
+    <Type Name="Movimento">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="IdUsuario" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="IdProduto" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="IdFilial" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Data" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Quantidade" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="Observacoes" Type="System.String" DbType="NVarChar(1000)" CanBeNull="true" />
+      <Association Name="Usuario_Movimento" Member="Usuario" Storage="_USUARIOS" ThisKey="IdUsuario" OtherKey="Id" Type="Usuario" IsForeignKey="true" DeleteOnNull="true" />
+      <Association Name="Produto_Movimento" Member="Produto" Storage="_PRODUTOS" ThisKey="IdProduto" OtherKey="Id" Type="Produto" IsForeignKey="true" DeleteOnNull="true" />
+      <Association Name="Filial_Movimento" Member="Filial" Storage="_FILIAIS" ThisKey="IdFilial" OtherKey="Id" Type="Filial" IsForeignKey="true" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="PRODUTOS" Member="Produtos">
+    <Type Name="Produto">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="IdCategoria" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="IdUnidade" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="IdFornecedor" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Codigo" Type="System.String" DbType="NVarChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="Descricao" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="PrecoCusto" Type="System.Decimal" DbType="Money" CanBeNull="true" />
+      <Column Name="Ativo" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="Critico" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Association Name="Produto_Movimento" Member="Movimentos" Storage="_MOVIMENTOS" ThisKey="Id" OtherKey="IdProduto" Type="Movimento" />
+      <Association Name="Fornecedor_Produto" Member="Fornecedor" Storage="_FORNECEDORES" ThisKey="IdFornecedor" OtherKey="Id" Type="Fornecedor" IsForeignKey="true" DeleteOnNull="true" />
+      <Association Name="Categoria_Produto" Member="Categoria" Storage="_CATEGORIAS" ThisKey="IdCategoria" OtherKey="Id" Type="Categoria" IsForeignKey="true" DeleteOnNull="true" />
+      <Association Name="Unidade_Produto" Member="Unidade" Storage="_UNIDADES" ThisKey="IdUnidade" OtherKey="Id" Type="Unidade" IsForeignKey="true" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="TAGS" Member="Tags">
+    <Type Name="Tag">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="IdUnidade" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Nome" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Association Name="Tag_CategoriasTags" Member="CategoriasTags" Storage="_CATEGORIAS_TAGS" ThisKey="Id" OtherKey="IdTag" Type="CategoriasTags" />
+      <Association Name="Unidade_Tag" Member="Unidade" Storage="_UNIDADES" ThisKey="IdUnidade" OtherKey="Id" Type="Unidade" IsForeignKey="true" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="UNIDADES" Member="Unidades">
+    <Type Name="Unidade">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Simbolo" Type="System.String" DbType="NVarChar(10) NOT NULL" CanBeNull="false" />
+      <Column Name="Descricao" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Casas" Type="System.Byte" DbType="TinyInt" CanBeNull="false" />
+      <Association Name="Unidade_Produto" Member="Produtos" Storage="_PRODUTOS" ThisKey="Id" OtherKey="IdUnidade" Type="Produto" />
+      <Association Name="Unidade_Tag" Member="Tags" Storage="_TAGS" ThisKey="Id" OtherKey="IdUnidade" Type="Tag" />
+    </Type>
+  </Table>
+  <Table Name="USUARIOS" Member="Usuarios">
+    <Type Name="Usuario">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Nome" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Apelido" Type="System.String" DbType="NVarChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="Senha" Type="System.String" DbType="NVarChar(100)" CanBeNull="false" />
+      <Column Name="Ativo" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Association Name="Usuario_Movimento" Member="Movimentos" Storage="_MOVIMENTOS" ThisKey="Id" OtherKey="IdUsuario" Type="Movimento" />
+    </Type>
+  </Table>
+</Database>

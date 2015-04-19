@@ -1,0 +1,40 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.master.cs" Inherits="Com.Gt.SomSc.WebApp.Site" %>
+
+<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajax" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>::: Controle SomSC :::</title>
+    <asp:ContentPlaceHolder ID="HeadContent" runat="server">
+    </asp:ContentPlaceHolder>
+    <link href="~/Css/Site.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <form id="MainForm" runat="server">
+    <ajax:ToolkitScriptManager ID="ScriptManager" runat="server">
+    </ajax:ToolkitScriptManager>
+    <div class="topContent">
+        Controle SomSC
+    </div>
+    <div class="leftContent">
+        <asp:SiteMapDataSource ID="SiteMap" runat="server" ShowStartingNode="False" />
+        <asp:Menu ID="Menu" runat="server" DataSourceID="SiteMap" StaticDisplayLevels="4"
+            StaticSubMenuIndent="5" Font-Underline="False">
+            <LevelMenuItemStyles>
+                <asp:MenuItemStyle />
+            </LevelMenuItemStyles>
+            <LevelSubMenuStyles>
+                <asp:SubMenuStyle />
+            </LevelSubMenuStyles>
+        </asp:Menu>
+        <asp:LinkButton ID="SairButton" runat="server" OnClick="SairButton_Click" Font-Underline="False">Sair</asp:LinkButton>
+    </div>
+    <div class="mainContent">
+        <asp:ContentPlaceHolder ID="MainContent" runat="server" />
+    </div>
+    <div class="footerContent">
+        &copy; 1979-2012 Giancarlo Tomazelli. Todos os direitos reservados.
+    </div>
+    </form>
+</body>
+</html>
