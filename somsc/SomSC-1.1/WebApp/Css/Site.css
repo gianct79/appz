@@ -1,0 +1,129 @@
+﻿/*
+* Copyright 1979-2012 Giancarlo Tomazelli. All Rights Reserved. 
+*
+* Do not re-use without permission.
+*/
+
+body
+{
+    font-family: 'Segoe UI' , sans-serif, Verdana;
+}
+
+input
+{
+    font-family: 'Courier New' , Courier, monospace;
+    font-size: small;
+    border: 1px solid #999999;
+}
+
+select
+{
+    border: 1px solid #999999;
+}
+
+.button
+{
+    font-family: 'Segoe UI' , sans-serif, Verdana;
+    color: #FFFFFF;
+    background-color: #999999;
+    border: 1px solid #999999;
+    padding-top: 4px;
+    padding-right: 8px;
+    padding-bottom: 4px;
+    padding-left: 8px;
+}
+
+.grid a:link, .grid a:visited
+{
+    color: #FFFFFF;
+    text-decoration: none;
+}
+
+.grid a:hover
+{
+    color: #FFFFFF;
+    text-decoration: underline;
+}
+
+.grid
+{
+    border: 1px solid #999999;
+    border-bottom: 3px solid #999999;
+    border-collapse: collapse;
+}
+
+.grid th, td
+{
+    padding-left: 2px;
+    padding-right: 2px;
+}
+
+.grid th
+{
+    text-align: left;
+    color: #FFFFFF;
+    background-color: #999999;
+    border-left: 1px solid #999999;
+    border-right: 1px solid #999999;
+    border-bottom: 1px solid #999999;
+}
+
+.grid td
+{
+    border-left: 0px;
+    border-right: 0px;
+    border-bottom: 1px dotted #999999;
+}
+
+.calendar
+{
+    text-decoration: none;
+}
+
+.topContent
+{
+    text-align: left;
+    background-color: #999999;
+    color: White;
+    font-size: xx-large;
+    font-weight: bold;
+    padding: 5px;
+    height: 50px;
+}
+
+.topContent a
+{
+    text-decoration: none;
+    color: White;
+}
+
+.leftContent
+{
+    width: 200px;
+    padding: 10px;
+    text-align: left;
+    top: 80px;
+    margin-top: 10px;
+    left: 0px;
+    position: absolute;
+}
+
+.mainContent
+{
+    text-align: left;
+    margin-left: 220px;
+    padding: 10px;
+}
+
+.loginContent
+{
+    text-align: center;
+}
+
+.footerContent
+{
+    font-size: smaller;
+    font-weight: normal;
+    text-align: center;
+    padding: 5px;
+}

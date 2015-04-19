@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!-- 
+ Copyright 1979-2012 Giancarlo Tomazelli. All Rights Reserved.
+
+ Do not re-use without permission.
+-->
+<siteMap xmlns="http://schemas.microsoft.com/AspNet/SiteMap-File-1.0" >
+    <siteMapNode title="Controle">
+        <siteMapNode title="Home" description="Controle SomSC">
+            <siteMapNode url="~/Default.aspx" title="Visão Geral"></siteMapNode>
+        </siteMapNode>
+        <siteMapNode title="Cadastros" description="Cadastros Gerais">
+            <siteMapNode url="~/Usuarios.aspx" title="Usuários"></siteMapNode>
+            <siteMapNode url="~/Filiais.aspx" title="Filiais"></siteMapNode>
+            <siteMapNode url="~/Categorias.aspx" title="Categorias de Produtos"></siteMapNode>
+            <siteMapNode url="~/Unidades.aspx" title="Unidades de Medida"></siteMapNode>
+            <siteMapNode url="~/Fornecedores.aspx" title="Fornecedores"></siteMapNode>
+            <siteMapNode url="~/Produtos.aspx" title="Produtos"></siteMapNode>
+        </siteMapNode>
+        <siteMapNode title="Movimentos" description="Movimentos de Estoque">
+            <siteMapNode url="~/Ajustes.aspx" title="Ajustes de Estoques"></siteMapNode>
+        </siteMapNode>
+        <siteMapNode title="Relatórios" description="Relatórios de Estoque">
+            <siteMapNode url="~/Movimentos.aspx" title="Movimentos"></siteMapNode>
+            <siteMapNode url="~/Saldos.aspx" title="Saldos do Estoque"></siteMapNode>
+            <siteMapNode url="~/Criticos.aspx" title="Estoque Crítico"></siteMapNode>
+        </siteMapNode>
+    </siteMapNode>
+</siteMap>
