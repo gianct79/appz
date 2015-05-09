@@ -7,7 +7,7 @@ import json
 
 from anp_reader import __version__, __description__, log
 from anp_reader.modules.price import PriceController
-from anp_reader.modules.product import FUEL_TYPES
+from anp_reader.modules.product import PRODUCT_TYPES
 from modules.retailer import RetailerController
 
 
@@ -17,7 +17,7 @@ def main():
         description=__description__)
 
     parser.add_argument('-s', '--state', nargs='*',
-                        help='Process prices from States',
+                        help='Process prices from states',
                         required=True)
 
     parser.add_argument('-r', '--retailer', action='store_true',
@@ -34,21 +34,22 @@ def main():
     if args.retailer:
         retailer_ctrl = RetailerController()
 
-        # fuel_set = set(map(lambda x: x[0], FUEL_TYPES.values()))
-        fuel_set = [FUEL_TYPES['GASOLINA_PRM'][0]]
+        # fuel_set = set(map(lambda x: x[0], PRODUCT_TYPES.values()))
+        # fuel_set = [PRODUCT_TYPES[u'GASOLINA C COMUM'][0]]
+        fuel_set = [0]
 
-        file_set = retailer_ctrl.download_data(state_set, fuel_set)
-        cnpj_set = retailer_ctrl.extract_cnpj(file_set)
-        file_set = retailer_ctrl.download_cnpj(cnpj_set)
-        retailer_map = retailer_ctrl.process_cnpj(file_set)
+        file_set = retailer_ctrl.extract_data(state_set, fuel_set)
+        # cnpj_set = retailer_ctrl.extract_cnpj(file_set)
+        # file_set = retailer_ctrl.download_cnpj(cnpj_set)
+        # retailer_map = retailer_ctrl.process_cnpj(file_set)
 
-        retailer_ctrl.process_address_and_save(retailer_map)
+        # retailer_ctrl.process_address_and_save(retailer_map)
 
     if args.price:
         price_ctrl = PriceController()
 
-        # fuel_set = set(map(lambda x: x[1], FUEL_TYPES.values()))
-        fuel_set = [FUEL_TYPES['GASOLINA_COM'][1]]
+        fuel_set = set(map(lambda x: x[1], PRODUCT_TYPES.values()))
+        # fuel_set = [PRODUCT_TYPES[u'GASOLINA C COMUM'][1]]
 
         price_ctrl.process_state_data_and_save(state_set, fuel_set)
 

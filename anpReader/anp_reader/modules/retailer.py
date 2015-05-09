@@ -15,8 +15,9 @@ class RetailerController():
         pass
 
     @staticmethod
-    def download_data(state_set, product_set):
+    def extract_data(state_set, product_set):
         file_set = []
+        cnpj_set = {}
         for state in state_set:
             state = state.upper()
             for product in product_set:
@@ -35,22 +36,46 @@ class RetailerController():
                           'sBandeira': '0',
                           'sProduto': product,
                           'sTipodePosto': '0',
+                          'p': '',
                           'hPesquisar': 'PESQUISAR'}
 
-                r = requests.head('http://www.anp.gov.br/postos/consulta.asp', data=values, headers=headers)
-                if r.status_code == requests.codes.ok:
-                    headers_dw = headers
-                    headers_dw['Referer'] = 'http://www.anp.gov.br/postos/consulta.asp'
-                    headers_dw['Cookie'] = r.headers.get('set-cookie', None)
+                tot_pg = 200
+                cur_pg = 1
+                while cur_pg <= tot_pg:
+                    values['p'] = cur_pg
+                    r = requests.get(
+                        'http://www.anp.gov.br/postos/consulta.asp',
+                        data=values, headers=headers, stream=True)
 
-                    r = requests.get('http://www.anp.gov.br/postos/GeraExcel.asp', data={'Submit1': 'Exportar'},
-                                     headers=headers_dw, stream=True)
                     if r.status_code == requests.codes.ok:
-                        filename = os.path.join(tempfile.tempdir, state + '_' + product)
-                        with open(filename, 'wb') as fd:
+                        headers['Referer'] = \
+                            'http://www.anp.gov.br/postos/consulta.asp'
+                        headers['Cookie'] = r.headers.get('set-cookie', None)
+
+                        tmp_file = os.path.join(
+                            tempfile.tempdir, state + '_' + product)
+                        with open(tmp_file, 'wb') as fd:
                             for chunk in r.iter_content(8192):
                                 fd.write(chunk)
-                        file_set.append(filename)
+
+                        html_dom = BeautifulSoup(open(tmp_file))
+                        if cur_pg == 1:
+                            count_dom = html_dom.find_all('table')[3]
+                            if count_dom:
+                                count_str = ''.join(x for x in
+                                                    count_dom.contents[5].text
+                                                    if x.isdigit())
+                                tot_pg = int(count_str) / 200
+
+                        retailer_dom = html_dom.find_all('table')[7]
+                        if retailer_dom:
+                            row_dom = retailer_dom.find_all('tr')[2:-1]
+                            for row in row_dom:
+                                cnpj = row.contents[1].contents[0].contents[2].attrs['value']
+                                cod = row.contents[1].contents[0].contents[1].attrs['value']
+                                cnpj_set[cnpj] = cod
+
+                    cur_pg += 1
 
         return file_set
 
