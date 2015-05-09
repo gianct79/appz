@@ -38,12 +38,9 @@ def main():
         # fuel_set = [PRODUCT_TYPES[u'GASOLINA C COMUM'][0]]
         fuel_set = [0]
 
-        file_set = retailer_ctrl.extract_data(state_set, fuel_set)
-        # cnpj_set = retailer_ctrl.extract_cnpj(file_set)
-        # file_set = retailer_ctrl.download_cnpj(cnpj_set)
-        # retailer_map = retailer_ctrl.process_cnpj(file_set)
+        # retailer_ctrl.download_retailers(state_set, fuel_set)
 
-        # retailer_ctrl.process_address_and_save(retailer_map)
+        retailer_ctrl.process_retailers(state_set)
 
     if args.price:
         price_ctrl = PriceController()
@@ -53,12 +50,12 @@ def main():
 
         price_ctrl.process_state_data_and_save(state_set, fuel_set)
 
-    filename = os.path.join(tempfile.tempdir, 'retailer.json')
-    with open(filename, 'r') as infile:
-        data = json.load(infile)
-        log.info(data)
+    # filename = os.path.join(tempfile.tempdir, 'retailer.json')
+    # with open(filename, 'r') as infile:
+    #     data = json.load(infile)
+    #     log.info(data)
 
-    filename = os.path.join(tempfile.tempdir, 'price.json')
-    with open(filename, 'r') as infile:
-        data = json.load(infile)
-        log.info(data)
+    # filename = os.path.join(tempfile.tempdir, 'price.json')
+    # with open(filename, 'r') as infile:
+    #     data = json.load(infile)
+    #     log.info(data)

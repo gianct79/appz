@@ -2,6 +2,8 @@
 import os
 import tempfile
 import json
+import Queue
+import threading
 
 from bs4 import BeautifulSoup
 import requests
@@ -12,22 +14,33 @@ from anp_reader.modules.util import remove_punctuation, remove_accents
 
 class RetailerController():
     def __init__(self):
-        pass
+        self.retailer_queue = Queue.Queue()
 
-    @staticmethod
-    def extract_data(state_set, product_set):
-        file_set = []
-        cnpj_set = {}
+        self.retailer_map = {}
+        self.retailer_lock = threading.Lock()
+
+        self.headers = {'User-Agent': 'Mozilla/4.0 (compatible; MSIE 5.5; '
+                                      'Windows NT)',
+                        'Origin': 'http://www.anp.gov.br',
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'Accept-Encoding': 'gzip, deflate',
+                        'Cache-Control': 'max-age=0',
+                        'Connection:': 'keep-alive',
+                        'Accept': 'text/html'}
+
+    def download_retailers(self, state_set, product_set):
+
+        for i in range(25):
+            t = threading.Thread(target=self._download_retailer)
+            t.daemon = True
+            t.start()
+
         for state in state_set:
+            dirname = os.path.join(tempfile.tempdir, state)
+            if not os.path.exists(dirname):
+                os.mkdir(dirname)
             state = state.upper()
             for product in product_set:
-                headers = {'User-Agent': 'Mozilla/4.0 (compatible; MSIE 5.5; Windows NT)',
-                           'Origin': 'http://www.anp.gov.br',
-                           'Content-Type': 'application/x-www-form-urlencoded',
-                           'Accept-Encoding': 'gzip, deflate',
-                           'Cache-Control': 'max-age=0',
-                           'Connection:': 'keep-alive',
-                           'Accept': 'text/html'}
                 product = str(product)
                 values = {'sCnpj': '',
                           'sRazaoSocial': '',
@@ -36,7 +49,6 @@ class RetailerController():
                           'sBandeira': '0',
                           'sProduto': product,
                           'sTipodePosto': '0',
-                          'p': '',
                           'hPesquisar': 'PESQUISAR'}
 
                 tot_pg = 200
@@ -45,12 +57,12 @@ class RetailerController():
                     values['p'] = cur_pg
                     r = requests.get(
                         'http://www.anp.gov.br/postos/consulta.asp',
-                        data=values, headers=headers, stream=True)
-
+                        data=values, headers=self.headers, stream=True)
                     if r.status_code == requests.codes.ok:
-                        headers['Referer'] = \
+                        self.headers['Referer'] = \
                             'http://www.anp.gov.br/postos/consulta.asp'
-                        headers['Cookie'] = r.headers.get('set-cookie', None)
+                        self.headers['Cookie'] = r.headers.get('set-cookie',
+                                                               None)
 
                         tmp_file = os.path.join(
                             tempfile.tempdir, state + '_' + product)
@@ -58,141 +70,130 @@ class RetailerController():
                             for chunk in r.iter_content(8192):
                                 fd.write(chunk)
 
-                        html_dom = BeautifulSoup(open(tmp_file))
+                        html_dom = BeautifulSoup(open(tmp_file), 'lxml')
+                        tables = html_dom.find_all('table')
                         if cur_pg == 1:
-                            count_dom = html_dom.find_all('table')[3]
+                            count_dom = tables[3]
                             if count_dom:
                                 count_str = ''.join(x for x in
                                                     count_dom.contents[5].text
                                                     if x.isdigit())
-                                tot_pg = int(count_str) / 200
+                                tot_pg = int(count_str) / 200 + 1
 
-                        retailer_dom = html_dom.find_all('table')[7]
+                        retailer_dom = tables[7]
                         if retailer_dom:
                             row_dom = retailer_dom.find_all('tr')[2:-1]
                             for row in row_dom:
-                                cnpj = row.contents[1].contents[0].contents[2].attrs['value']
-                                cod = row.contents[1].contents[0].contents[1].attrs['value']
-                                cnpj_set[cnpj] = cod
+                                cnpj = remove_punctuation(unicode(row.contents[
+                                    1].contents[0].contents[2].attrs['value']))
+                                cod = row.contents[1].contents[0].contents[
+                                    1].attrs['value']
+                                self.retailer_queue.put((state, cnpj, cod))
 
                     cur_pg += 1
 
-        return file_set
+        self.retailer_queue.join()
 
-    @staticmethod
-    def extract_cnpj(file_set):
-        cnpj_set = set()
-        for path in file_set:
-            html_dom = BeautifulSoup(open(path))
-            station_dom = html_dom.find_all('table')[1]
+    def _download_retailer(self):
+        while True:
+            item = self.retailer_queue.get()
+            values = {'Cod_inst': item[2],
+                      'estado': '0',
+                      'municipio': '0'}
 
-            if station_dom:
-                for row_dom in station_dom.find_all('tr')[1:]:
-                    cnpj = remove_punctuation(row_dom.contents[4].text)
-                    cnpj_set.add(cnpj)
-
-        return cnpj_set
-
-    @staticmethod
-    def download_cnpj(cnpj_set):
-        file_set = []
-        for cnpj in cnpj_set:
-            headers = {'User-Agent': 'Mozilla/4.0 (compatible; MSIE 5.5; Windows NT)',
-                       'Origin': 'http://www.anp.gov.br',
-                       'Content-Type': 'application/x-www-form-urlencoded',
-                       'Accept-Encoding': 'gzip, deflate',
-                       'Cache-Control': 'max-age=0',
-                       'Connection:': 'keep-alive',
-                       'Accept': 'text/html'}
-            values = {'sCnpj': cnpj,
-                      'sRazaoSocial': '',
-                      'sEstado': '0',
-                      'sMunicipio': '0',
-                      'sBandeira': '0',
-                      'sProduto': '0',
-                      'sTipodePosto': '0',
-                      'hPesquisar': 'PESQUISAR'}
-
-            r = requests.get('http://www.anp.gov.br/postos/consulta.asp', data=values, headers=headers, stream=True)
+            r = requests.get('http://www.anp.gov.br/postos/resultado.asp',
+                             data=values, headers=self.headers, stream=True)
             if r.status_code == requests.codes.ok:
-                filename = os.path.join(tempfile.tempdir, cnpj)
+                filename = os.path.join(tempfile.tempdir, item[0], item[1])
                 with open(filename, 'wb') as fd:
                     for chunk in r.iter_content(8192):
                         fd.write(chunk)
+            self.retailer_queue.task_done()
 
-                html_dom = BeautifulSoup(open(filename))
-                retailer_dom = html_dom.find('input', {'name': 'i1'})
+    def process_retailers(self, state_set):
+        for i in range(25):
+            t = threading.Thread(target=self._process_retailer)
+            t.daemon = True
+            t.start()
 
-                if retailer_dom:
-                    headers_dw = headers
-                    headers_dw['Referer'] = 'http://www.anp.gov.br/postos/consulta.asp'
-                    headers_dw['Cookie'] = r.headers.get('set-cookie', None)
+        for state in state_set:
+            dirname = os.path.join(tempfile.tempdir, state)
+            files = os.listdir(dirname)
+            for cnpj in files:
+                html_dom = BeautifulSoup(open(os.path.join(dirname, cnpj)))
+                retailer_dom = html_dom.find_all('table')[3]
+                try:
+                    if retailer_dom:
+                        row_dom = retailer_dom.find_all('tr')
+                        status = row_dom[1].text.lower()
+                        if 'revogada' in status:
+                            continue
+                        pending = 'pendente' in status
+                        if pending:
+                            row_dom.insert(0, None)
 
-                    values_dw = {'Cod_inst': retailer_dom.attrs['value'],
-                                 'estado': '0',
-                                 'municipio': '0'}
+                        address = row_dom[7].contents[2].text.strip()
+                        address_ex = row_dom[8].contents[2].text.strip()
+                        if address_ex:
+                            address += ' ' + address_ex
+                        address_ex = row_dom[9].contents[2].text.strip()
+                        address += ' ' + address_ex
 
-                    r = requests.get('http://www.anp.gov.br/postos/resultado.asp', data=values_dw,
-                                     headers=headers_dw, stream=True)
-                    if r.status_code == requests.codes.ok:
-                        filename = os.path.join(tempfile.tempdir, cnpj)
-                        with open(filename, 'wb') as fd:
-                            for chunk in r.iter_content(8192):
-                                fd.write(chunk)
-                        file_set.append(filename)
+                        retailer_info = {
+                            'company_name': row_dom[5].contents[
+                                2].text.strip().upper(),
+                            'trade_name': row_dom[6].contents[
+                                2].text.strip().upper(),
+                            'address': address.upper(),
+                            'city': remove_accents(
+                                row_dom[10].contents[2].text.strip().upper()),
+                            'zip': row_dom[11].contents[2].text.strip(),
+                            'brand': None if pending else row_dom[
+                                14].contents[2].text.strip().upper()
+                        }
 
-        return file_set
+                        if not pending:
+                            product_info = []
+                            for product_row in row_dom[18:-3]:
+                                product = remove_accents(
+                                    product_row.contents[
+                                        1].text.strip().upper())
+                                if product in PRODUCT_TYPES:
+                                    product_info.append(
+                                        PRODUCT_TYPES[product][0])
+                            retailer_info['products'] = product_info
 
-    @staticmethod
-    def process_cnpj(file_set):
-        retailer_map = dict()
-        for path in file_set:
-            html_dom = BeautifulSoup(open(path))
-            retailer_dom = html_dom.find_all('table')[3]
+                        self.retailer_queue.put((cnpj, retailer_info))
+                except Exception:
+                    pass
 
-            if retailer_dom:
-                row_dom = retailer_dom.find_all('tr')[4:-3]
+        self.retailer_queue.join()
 
-                cnpj = remove_punctuation(row_dom[0].contents[3].text)
-                address = row_dom[3].contents[2].text.strip()
-                address_ex = row_dom[4].contents[2].text.strip()
-                if address_ex:
-                    address += ' ' + address_ex
+        filename = os.path.join(tempfile.tempdir, 'retailer.json')
+        with open(filename, 'w') as outfile:
+            json.dump(self.retailer_map, outfile)
 
-                retailer_info = {
-                    'company_name': row_dom[1].contents[2].text.strip().upper(),
-                    'address': address.upper(),
-                    'city': remove_accents(row_dom[6].contents[2].text.strip().upper()),
-                    'zip': row_dom[7].contents[2].text.strip().upper(),
-                    'brand': row_dom[10].contents[2].text.strip().upper()
-                }
-
-                product_info = []
-                for product_row in row_dom[14:]:
-                    product = remove_accents(product_row.contents[1].text.strip().upper())
-                    if product in PRODUCT_TYPES:
-                        product_info.append(PRODUCT_TYPES[product][0])
-
-                retailer_info['products'] = product_info
-                retailer_map[cnpj] = retailer_info
-
-        return retailer_map
-
-    @staticmethod
-    def process_address_and_save(retailer_map):
-        for cnpj, retailer in retailer_map.iteritems():
-            headers = {'User-Agent': 'Mozilla/4.0 (compatible; MSIE 5.5; Windows NT)',
-                       'Accept-Language': 'pt-BR'}
-            full_address = retailer['address'] + ', ' + retailer['city'] + ', ' + ', BRASIL'
+    def _process_retailer(self):
+        while True:
+            item = self.retailer_queue.get()
+            cnpj = item[0]
+            retailer = item[1]
+            headers = {
+                'User-Agent': 'Mozilla/4.0 (compatible; MSIE 5.5; Windows NT)',
+                'Accept-Language': 'pt-BR'}
+            full_address = retailer['address'] + ', ' + retailer[
+                'city'] + ', BRASIL'
             url = 'https://maps.googleapis.com/maps/api/geocode/json?address=%s&sensor=false' % full_address
 
             r = requests.get(url, headers=headers)
             if r.status_code == requests.codes.ok:
                 address = r.json()
                 if address['status'] == 'OK':
-                    retailer['location'] = address['results'][0]['geometry']['location']
-                    retailer['formatted_address'] = address['results'][0]['formatted_address']
-
-        filename = os.path.join(tempfile.tempdir, 'retailer.json')
-        with open(filename, 'w') as outfile:
-            json.dump(retailer_map, outfile)
+                    retailer['location'] = address['results'][0]['geometry'][
+                        'location']
+                    retailer['formatted_address'] = address['results'][0][
+                        'formatted_address']
+            self.retailer_lock.acquire()
+            self.retailer_map[cnpj] = retailer
+            self.retailer_lock.release()
+            self.retailer_queue.task_done()
