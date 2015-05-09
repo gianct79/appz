@@ -139,7 +139,7 @@ class RetailerController():
                 if retailer_dom:
                     row_dom = retailer_dom.find_all('tr')
                     status = row_dom[1].text.lower()
-                    if 'revogada' in status:
+                    if 'revoga' in status:  # revogada or revogação
                         continue
                     pending = 'pendente' in status
                     if pending:
