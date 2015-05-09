@@ -8,6 +8,8 @@ import threading
 from bs4 import BeautifulSoup
 import requests
 
+from anp_reader import log
+
 from anp_reader.modules.product import PRODUCT_TYPES
 from anp_reader.modules.util import remove_punctuation, remove_accents
 
@@ -120,52 +122,7 @@ class RetailerController():
             dirname = os.path.join(tempfile.tempdir, state)
             files = os.listdir(dirname)
             for cnpj in files:
-                html_dom = BeautifulSoup(open(os.path.join(dirname, cnpj)))
-                retailer_dom = html_dom.find_all('table')[3]
-                try:
-                    if retailer_dom:
-                        row_dom = retailer_dom.find_all('tr')
-                        status = row_dom[1].text.lower()
-                        if 'revogada' in status:
-                            continue
-                        pending = 'pendente' in status
-                        if pending:
-                            row_dom.insert(0, None)
-
-                        address = row_dom[7].contents[2].text.strip()
-                        address_ex = row_dom[8].contents[2].text.strip()
-                        if address_ex:
-                            address += ' ' + address_ex
-                        address_ex = row_dom[9].contents[2].text.strip()
-                        address += ' ' + address_ex
-
-                        retailer_info = {
-                            'company_name': row_dom[5].contents[
-                                2].text.strip().upper(),
-                            'trade_name': row_dom[6].contents[
-                                2].text.strip().upper(),
-                            'address': address.upper(),
-                            'city': remove_accents(
-                                row_dom[10].contents[2].text.strip().upper()),
-                            'zip': row_dom[11].contents[2].text.strip(),
-                            'brand': None if pending else row_dom[
-                                14].contents[2].text.strip().upper()
-                        }
-
-                        if not pending:
-                            product_info = []
-                            for product_row in row_dom[18:-3]:
-                                product = remove_accents(
-                                    product_row.contents[
-                                        1].text.strip().upper())
-                                if product in PRODUCT_TYPES:
-                                    product_info.append(
-                                        PRODUCT_TYPES[product][0])
-                            retailer_info['products'] = product_info
-
-                        self.retailer_queue.put((cnpj, retailer_info))
-                except Exception:
-                    pass
+                self.retailer_queue.put(os.path.join(dirname, cnpj))
 
         self.retailer_queue.join()
 
@@ -176,24 +133,70 @@ class RetailerController():
     def _process_retailer(self):
         while True:
             item = self.retailer_queue.get()
-            cnpj = item[0]
-            retailer = item[1]
-            headers = {
-                'User-Agent': 'Mozilla/4.0 (compatible; MSIE 5.5; Windows NT)',
-                'Accept-Language': 'pt-BR'}
-            full_address = retailer['address'] + ', ' + retailer[
-                'city'] + ', BRASIL'
-            url = 'https://maps.googleapis.com/maps/api/geocode/json?address=%s&sensor=false' % full_address
+            try:
+                html_dom = BeautifulSoup(open(item))
+                retailer_dom = html_dom.find_all('table')[3]
+                if retailer_dom:
+                    row_dom = retailer_dom.find_all('tr')
+                    status = row_dom[1].text.lower()
+                    if 'revogada' in status:
+                        continue
+                    pending = 'pendente' in status
+                    if pending:
+                        row_dom.insert(0, None)
 
-            r = requests.get(url, headers=headers)
-            if r.status_code == requests.codes.ok:
-                address = r.json()
-                if address['status'] == 'OK':
-                    retailer['location'] = address['results'][0]['geometry'][
-                        'location']
-                    retailer['formatted_address'] = address['results'][0][
-                        'formatted_address']
-            self.retailer_lock.acquire()
-            self.retailer_map[cnpj] = retailer
-            self.retailer_lock.release()
-            self.retailer_queue.task_done()
+                    cnpj = remove_punctuation(row_dom[4].contents[
+                        3].text.strip())
+                    address = row_dom[7].contents[2].text.strip()
+                    address_ex = row_dom[8].contents[2].text.strip()
+                    if address_ex:
+                        address += ' ' + address_ex
+                    address_ex = row_dom[9].contents[2].text.strip()
+                    address += ' ' + address_ex
+
+                    retailer_info = {
+                        'company_name': row_dom[5].contents[
+                            2].text.strip().upper(),
+                        'trade_name': row_dom[6].contents[
+                            2].text.strip().upper(),
+                        'address': address.upper(),
+                        'city': remove_accents(
+                            row_dom[10].contents[2].text.strip().upper()),
+                        'zip': row_dom[11].contents[2].text.strip(),
+                        'brand': None if pending else row_dom[
+                            14].contents[2].text.strip().upper()
+                    }
+
+                    if not pending:
+                        product_info = []
+                        for product_row in row_dom[18:-3]:
+                            product = remove_accents(
+                                product_row.contents[
+                                    1].text.strip().upper())
+                            if product in PRODUCT_TYPES:
+                                product_info.append(
+                                    PRODUCT_TYPES[product][0])
+                        retailer_info['products'] = product_info
+
+                    headers = {
+                        'User-Agent': 'Mozilla/4.0 (compatible; MSIE 5.5; Windows NT)',
+                        'Accept-Language': 'pt-BR'}
+                    full_address = retailer_info['address'] + ', ' \
+                                   + retailer_info['city'] + ', BRASIL'
+                    url = 'https://maps.googleapis.com/maps/api/geocode/json?address=%s&sensor=false' % full_address
+
+                    r = requests.get(url, headers=headers)
+                    if r.status_code == requests.codes.ok:
+                        address = r.json()
+                        if address['status'] == 'OK':
+                            retailer_info['location'] = \
+                                address['results'][0]['geometry']['location']
+                            retailer_info['formatted_address'] = \
+                                address['results'][0]['formatted_address']
+                    self.retailer_lock.acquire()
+                    self.retailer_map[cnpj] = retailer_info
+                    self.retailer_lock.release()
+            except Exception as ex:
+                log.error(ex.message)
+            finally:
+                self.retailer_queue.task_done()
