@@ -26,7 +26,7 @@ def main():
                         required=False)
 
     args = parser.parse_args()
-    state_set = set(args.state)
+    state_set = set(args.uf)
 
     if args.retailer:
         retailer_ctrl = RetailerController()
