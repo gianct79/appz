@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+
 import os
 import tempfile
 import json
@@ -15,6 +16,8 @@ from anp_reader.modules.util import remove_punctuation, remove_accents
 
 class RetailerController():
     def __init__(self):
+        self.data_dir = os.path.join(tempfile.tempdir, 'retailers')
+
         self.download_queue = Queue.Queue()
         self.retailer_queue = Queue.Queue()
 
@@ -31,16 +34,16 @@ class RetailerController():
 
     def download_retailers(self, state_set, product_set):
 
-        for i in range(25):
+        for i in range(50):
             t = threading.Thread(target=self._download_retailer)
             t.daemon = True
             t.start()
 
         for state in state_set:
-            dirname = os.path.join(tempfile.tempdir, state)
-            if not os.path.exists(dirname):
-                os.mkdir(dirname)
             state = state.upper()
+            dirname = os.path.join(self.data_dir, state)
+            if not os.path.exists(dirname):
+                os.makedirs(dirname)
             for product in product_set:
                 product = str(product)
                 values = {'sCnpj': '',
@@ -63,7 +66,7 @@ class RetailerController():
                             self.headers['Referer'] = 'http://www.anp.gov.br/postos/consulta.asp'
                             self.headers['Cookie'] = r.headers.get('set-cookie', None)
 
-                            tmp_file = os.path.join(tempfile.tempdir, state + '_' + product)
+                            tmp_file = os.path.join(self.data_dir, state + '_' + product)
                             with open(tmp_file, 'wb') as fd:
                                 for chunk in r.iter_content(8192):
                                     fd.write(chunk)
@@ -100,32 +103,35 @@ class RetailerController():
 
                 r = requests.get('http://www.anp.gov.br/postos/resultado.asp', data=values, headers=self.headers, stream=True)
                 if r.status_code == requests.codes.ok:
-                    filename = os.path.join(tempfile.tempdir, item[0], item[1])
+                    filename = os.path.join(self.data_dir, item[0], item[1])
                     with open(filename, 'wb') as fd:
                         for chunk in r.iter_content(8192):
                             fd.write(chunk)
             except Exception as ex:
                 log.error(ex.message)
+                self.download_queue.put(item)  # check this
             finally:
                 self.download_queue.task_done()
 
     def process_retailers(self, state_set):
-        for i in range(25):
+        for i in range(50):
             t = threading.Thread(target=self._process_retailer)
             t.daemon = True
             t.start()
 
         for state in state_set:
-            dirname = os.path.join(tempfile.tempdir, state)
+            dirname = os.path.join(self.data_dir, state)
             files = os.listdir(dirname)
-            for cnpj in files:
-                self.retailer_queue.put(os.path.join(dirname, cnpj))
+            for f in files:
+                self.retailer_queue.put(os.path.join(dirname, f))
 
         self.retailer_queue.join()
 
-        filename = os.path.join(tempfile.tempdir, 'retailer.json')
+        filename = os.path.join(self.data_dir, 'retailers.json')
         with open(filename, 'w') as outfile:
             json.dump(self.retailer_map, outfile)
+
+        log.info('written %d retailer(s)' % len(self.retailer_map))
 
     def _process_retailer(self):
         headers = {
