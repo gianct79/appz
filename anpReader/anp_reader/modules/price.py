@@ -16,6 +16,8 @@ from anp_reader.modules.util import count_weeks, remove_accents
 
 class PriceController():
     def __init__(self):
+        self.data_dir = os.path.join(tempfile.tempdir, 'prices')
+
         self.download_queue = Queue.Queue()
         self.price_queue = Queue.Queue()
 
@@ -40,9 +42,9 @@ class PriceController():
 
         for state in state_set:
             state = state.upper()
-            dirname = os.path.join(tempfile.tempdir, state)
+            dirname = os.path.join(self.data_dir, state)
             if not os.path.exists(dirname):
-                os.mkdir(dirname)
+                os.makedirs(dirname)
             for product in product_set:
                 if product is None:
                     continue
@@ -66,7 +68,7 @@ class PriceController():
                 r = requests.get('http://www.anp.gov.br/preco/prc/Resumo_Por_Estado_Municipio.asp', data=values,
                                  headers=self.headers, stream=True)
                 if r.status_code == requests.codes.ok:
-                    filename = os.path.join(tempfile.tempdir, item[0], item[1])
+                    filename = os.path.join(self.data_dir, item[0], item[1])
                     with open(filename, 'wb') as fd:
                         for chunk in r.iter_content(8192):
                             fd.write(chunk)
@@ -81,14 +83,14 @@ class PriceController():
             t.start()
 
         for state in state_set:
-            dirname = os.path.join(tempfile.tempdir, state)
+            dirname = os.path.join(self.data_dir, state)
             files = os.listdir(dirname)
             for f in files:
                 self.price_queue.put((os.path.join(dirname, f), state))
 
         self.price_queue.join()
 
-        filename = os.path.join(tempfile.tempdir, 'prices.json')
+        filename = os.path.join(self.data_dir, 'prices.json')
         with open(filename, 'w') as outfile:
             json.dump(self.price_map, outfile)
 
