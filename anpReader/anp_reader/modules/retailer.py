@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+
 import os
 import tempfile
 import json
@@ -31,16 +32,16 @@ class RetailerController():
 
     def download_retailers(self, state_set, product_set):
 
-        for i in range(25):
+        for i in range(50):
             t = threading.Thread(target=self._download_retailer)
             t.daemon = True
             t.start()
 
         for state in state_set:
+            state = state.upper()
             dirname = os.path.join(tempfile.tempdir, state)
             if not os.path.exists(dirname):
                 os.mkdir(dirname)
-            state = state.upper()
             for product in product_set:
                 product = str(product)
                 values = {'sCnpj': '',
@@ -104,13 +105,12 @@ class RetailerController():
                     with open(filename, 'wb') as fd:
                         for chunk in r.iter_content(8192):
                             fd.write(chunk)
+                self.download_queue.task_done()
             except Exception as ex:
                 log.error(ex.message)
-            finally:
-                self.download_queue.task_done()
 
     def process_retailers(self, state_set):
-        for i in range(25):
+        for i in range(50):
             t = threading.Thread(target=self._process_retailer)
             t.daemon = True
             t.start()
@@ -118,14 +118,16 @@ class RetailerController():
         for state in state_set:
             dirname = os.path.join(tempfile.tempdir, state)
             files = os.listdir(dirname)
-            for cnpj in files:
-                self.retailer_queue.put(os.path.join(dirname, cnpj))
+            for f in files:
+                self.retailer_queue.put(os.path.join(dirname, f))
 
         self.retailer_queue.join()
 
-        filename = os.path.join(tempfile.tempdir, 'retailer.json')
+        filename = os.path.join(tempfile.tempdir, 'retailers.json')
         with open(filename, 'w') as outfile:
             json.dump(self.retailer_map, outfile)
+
+        log.info('written %d retailer(s)' % len(self.retailer_map))
 
     def _process_retailer(self):
         headers = {

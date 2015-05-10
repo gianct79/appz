@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import argparse
-import os
-import tempfile
-import json
 
 from anp_reader import __version__, __description__, log
 from anp_reader.modules.price import PriceController
@@ -16,8 +13,8 @@ def main():
     parser = argparse.ArgumentParser(
         description=__description__)
 
-    parser.add_argument('-s', '--state', nargs='*',
-                        help='Process prices from states',
+    parser.add_argument('-u', '--uf', nargs='*',
+                        help='Federation units to process',
                         required=True)
 
     parser.add_argument('-r', '--retailer', action='store_true',
@@ -34,27 +31,18 @@ def main():
     if args.retailer:
         retailer_ctrl = RetailerController()
 
-        # fuel_set = set(map(lambda x: x[0], PRODUCT_TYPES.values()))
-        # fuel_set = [PRODUCT_TYPES[u'GASOLINA C COMUM'][0]]
-        fuel_set = [0]
+        # product_set = set(map(lambda x: x[0], PRODUCT_TYPES.values()))
+        # product_set = [PRODUCT_TYPES[u'GASOLINA C COMUM'][0]]
+        product_set = [0]
 
-        retailer_ctrl.download_retailers(state_set, fuel_set)
+        retailer_ctrl.download_retailers(state_set, product_set)
         retailer_ctrl.process_retailers(state_set)
 
     if args.price:
         price_ctrl = PriceController()
 
-        fuel_set = set(map(lambda x: x[1], PRODUCT_TYPES.values()))
-        # fuel_set = [PRODUCT_TYPES[u'GASOLINA C COMUM'][1]]
+        product_set = set(map(lambda x: x[1], PRODUCT_TYPES.values()))
+        # product_set = [PRODUCT_TYPES[u'GASOLINA C COMUM'][1]]
 
-        price_ctrl.process_state_data_and_save(state_set, fuel_set)
-
-    # filename = os.path.join(tempfile.tempdir, 'retailer.json')
-    # with open(filename, 'r') as infile:
-    #     data = json.load(infile)
-    #     log.info(data)
-
-    # filename = os.path.join(tempfile.tempdir, 'price.json')
-    # with open(filename, 'r') as infile:
-    #     data = json.load(infile)
-    #     log.info(data)
+        price_ctrl.download_prices(state_set, product_set)
+        price_ctrl.process_prices(state_set)
