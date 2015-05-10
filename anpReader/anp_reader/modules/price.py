@@ -7,7 +7,6 @@ from bs4 import BeautifulSoup
 import requests
 
 from anp_reader.modules.product import ANP_CODES
-
 from anp_reader.modules.util import count_weeks, remove_accents
 
 
@@ -40,8 +39,8 @@ class PriceController():
                           'selEstado': state + '*GAA',
                           'selCombustivel': str(product) + '*GAA'}
 
-                r = requests.get('http://www.anp.gov.br/preco/prc/Resumo_Por_Estado_Municipio.asp', data=values,
-                                 headers=headers, stream=True)
+                r = requests.get('http://www.anp.gov.br/preco/prc/Resumo_Por_Estado_Municipio.asp', data=values, headers=headers,
+                                 stream=True)
                 if r.status_code == requests.codes.ok:
                     filename = os.path.join(tempfile.tempdir, state + '_' + str(product))
                     with open(filename, 'wb') as fd:
