@@ -8,7 +8,7 @@ tbl = dict.fromkeys(i for i in xrange(sys.maxunicode)
 
 
 def remove_punctuation(text):
-    return text.translate(tbl).strip()
+    return unicode(text).translate(tbl)
 
 
 def remove_accents(text):

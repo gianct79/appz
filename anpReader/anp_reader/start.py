@@ -38,8 +38,7 @@ def main():
         # fuel_set = [PRODUCT_TYPES[u'GASOLINA C COMUM'][0]]
         fuel_set = [0]
 
-        # retailer_ctrl.download_retailers(state_set, fuel_set)
-
+        retailer_ctrl.download_retailers(state_set, fuel_set)
         retailer_ctrl.process_retailers(state_set)
 
     if args.price:
