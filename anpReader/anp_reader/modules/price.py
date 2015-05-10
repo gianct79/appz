@@ -72,9 +72,11 @@ class PriceController():
                     with open(filename, 'wb') as fd:
                         for chunk in r.iter_content(8192):
                             fd.write(chunk)
-                self.download_queue.task_done()
             except Exception as ex:
                 log.error(ex.message)
+                self.download_queue.put(item)  # check this
+            finally:
+                self.download_queue.task_done()
 
     def process_prices(self, state_set):
         for i in range(50):
