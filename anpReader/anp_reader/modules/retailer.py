@@ -45,7 +45,6 @@ class RetailerController():
             if not os.path.exists(dirname):
                 os.makedirs(dirname)
             for product in product_set:
-                product = str(product)
                 values = {'sCnpj': '',
                           'sRazaoSocial': '',
                           'sEstado': state,
@@ -109,7 +108,7 @@ class RetailerController():
                             fd.write(chunk)
             except Exception as ex:
                 log.error(ex.message)
-                self.download_queue.put(item)  # check this
+                self.download_queue.put(item)
             finally:
                 self.download_queue.task_done()
 
@@ -145,12 +144,14 @@ class RetailerController():
                 if retailer_dom:
                     row_dom = retailer_dom.find_all('tr')
                     status = row_dom[1].text.lower()
-                    if 'revoga' in status:  # revogada or revogação
+                    atualizado = 'atualizado' in status
+                    if not atualizado:
                         continue
-                    pending = 'pendente' in status
-                    if pending:
-                        row_dom.insert(0, None)
-
+                    # if 'revoga' in status:  # revogada or revogação
+                    #    continue
+                    # pending = 'pendente' in status
+                    # if pending:
+                    #    row_dom.insert(0, None)
                     cnpj = remove_punctuation(row_dom[4].contents[3].text)
                     address = row_dom[7].contents[2].text.strip()
                     address_ex = row_dom[8].contents[2].text.strip()
@@ -165,10 +166,12 @@ class RetailerController():
                         'address': address.upper(),
                         'city': remove_accents(row_dom[10].contents[2].text.strip().upper()),
                         'zip': row_dom[11].contents[2].text.strip(),
-                        'brand': None if pending else row_dom[14].contents[2].text.strip().upper()
+                        # 'brand': None if pending else row_dom[14].contents[2].text.strip().upper()
+                        'brand': row_dom[14].contents[2].text.strip().upper()
                     }
 
-                    if not pending:
+                    # if not pending:
+                    if True:
                         product_info = []
                         for product_row in row_dom[18:-3]:
                             product = remove_accents(product_row.contents[1].text.strip().upper())
@@ -178,8 +181,8 @@ class RetailerController():
                         retailer_info['products'] = product_info
 
                     full_address = retailer_info['address'] + ', ' + retailer_info['city'] + ', BRASIL'
-                    url = 'https://maps.googleapis.com/maps/api/geocode/json?address=%s&sensor=false&key=AIzaSyCs7WX' \
-                          '-nxB0mmLmHG8mXrPRSYV-zfbXsaM' % full_address
+                    url = 'https://maps.googleapis.com/maps/api/geocode/json?address=%s&key=AIzaSyCs7WX-nxB0mmLmHG8mXrPRSYV' \
+                          '-zfbXsaM' % full_address
                     try:
                         r = requests.get(url, headers=headers)
                         if r.status_code == requests.codes.ok:

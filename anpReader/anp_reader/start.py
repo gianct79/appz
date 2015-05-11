@@ -33,7 +33,7 @@ def main():
 
         # product_set = set(map(lambda x: x[0], PRODUCT_TYPES.values()))
         # product_set = [PRODUCT_TYPES[u'GASOLINA C COMUM'][0]]
-        product_set = [0]
+        product_set = ['0']
 
         retailer_ctrl.download_retailers(state_set, product_set)
         retailer_ctrl.process_retailers(state_set)
