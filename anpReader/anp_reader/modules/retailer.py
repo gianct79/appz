@@ -133,9 +133,6 @@ class RetailerController():
         log.info('written %d retailer(s)' % len(self.retailer_map))
 
     def _process_retailer(self):
-        headers = {
-            'User-Agent': 'Mozilla/4.0 (compatible; MSIE 5.5; ''Windows NT)',
-            'Accept-Language': 'pt-BR'}
         while True:
             item = self.retailer_queue.get()
             try:
@@ -148,7 +145,7 @@ class RetailerController():
                     if not atualizado:
                         continue
                     # if 'revoga' in status:  # revogada or revogação
-                    #    continue
+                    # continue
                     # pending = 'pendente' in status
                     # if pending:
                     #    row_dom.insert(0, None)
@@ -179,19 +176,6 @@ class RetailerController():
                                 product_info.append(
                                     PRODUCT_TYPES[product][0])
                         retailer_info['products'] = product_info
-
-                    full_address = retailer_info['address'] + ', ' + retailer_info['city'] + ', BRASIL'
-                    url = 'https://maps.googleapis.com/maps/api/geocode/json?address=%s&key=AIzaSyCs7WX-nxB0mmLmHG8mXrPRSYV' \
-                          '-zfbXsaM' % full_address
-                    try:
-                        r = requests.get(url, headers=headers)
-                        if r.status_code == requests.codes.ok:
-                            address = r.json()
-                            if address['status'] == 'OK':
-                                retailer_info['location'] = address['results'][0]['geometry']['location']
-                                retailer_info['formatted_address'] = address['results'][0]['formatted_address']
-                    except Exception as ex:
-                        log.error(ex.message)
 
                     self.retailer_lock.acquire()
                     self.retailer_map[cnpj] = retailer_info

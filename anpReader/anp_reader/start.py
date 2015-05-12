@@ -3,6 +3,7 @@
 import argparse
 
 from anp_reader import __version__, __description__, log
+from anp_reader.modules.location import LocationController
 from anp_reader.modules.price import PriceController
 from anp_reader.modules.product import PRODUCT_TYPES
 from modules.retailer import RetailerController
@@ -25,6 +26,10 @@ def main():
                         help='Process price data',
                         required=False)
 
+    parser.add_argument('-l', '--location', action='store_true',
+                        help='Process retailers location',
+                        required=False)
+
     args = parser.parse_args()
     state_set = set(args.uf)
 
@@ -35,7 +40,7 @@ def main():
         # product_set = [PRODUCT_TYPES[u'GASOLINA C COMUM'][0]]
         product_set = ['0']
 
-        retailer_ctrl.download_retailers(state_set, product_set)
+        # retailer_ctrl.download_retailers(state_set, product_set)
         retailer_ctrl.process_retailers(state_set)
 
     if args.price:
@@ -46,3 +51,8 @@ def main():
 
         price_ctrl.download_prices(state_set, product_set)
         price_ctrl.process_prices(state_set)
+
+    if args.location:
+        location_ctrl = LocationController()
+
+        location_ctrl.process_retailers()
