@@ -11,7 +11,7 @@ import requests
 from anp_reader import log
 
 
-class LocationController():
+class LocationController:
     def __init__(self):
         self.data_dir = tempfile.tempdir
 
@@ -37,7 +37,7 @@ class LocationController():
             count = 0
             for key, retailer in self.retailer_map.iteritems():
                 if retailer.get('location', None) is None:
-                    self.retailer_queue.put((key, retailer))
+                    self.retailer_queue.put({'key': key, 'retailer': retailer})
                     count += 1
                 if count == 2500:
                     break
@@ -54,8 +54,8 @@ class LocationController():
         while True:
             item = self.retailer_queue.get()
             try:
-                key = item[0]
-                retailer = item[1]
+                key = item['key']
+                retailer = item['retailer']
                 if retailer.get('location', None) is not None:
                     continue
 

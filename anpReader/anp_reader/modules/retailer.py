@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+import glob
 import os
 import tempfile
 import json
@@ -14,7 +14,7 @@ from anp_reader.modules.product import PRODUCT_TYPES
 from anp_reader.modules.util import remove_punctuation, remove_accents
 
 
-class RetailerController():
+class RetailerController:
     def __init__(self):
         self.data_dir = os.path.join(tempfile.tempdir, 'retailers')
 
@@ -29,18 +29,17 @@ class RetailerController():
                         'Content-Type': 'application/x-www-form-urlencoded',
                         'Accept-Encoding': 'gzip, deflate',
                         'Cache-Control': 'max-age=0',
-                        'Connection:': 'keep-alive',
                         'Accept': 'text/html'}
 
-    def download_retailers(self, state_set, product_set):
+    def download_retailers(self, city_map, product_set):
 
         for i in range(50):
             t = threading.Thread(target=self._download_retailer)
             t.daemon = True
             t.start()
 
-        for state in state_set:
-            state = state.upper()
+        for city, info in city_map.iteritems():
+            state = info['state']
             dirname = os.path.join(self.data_dir, state)
             if not os.path.exists(dirname):
                 os.makedirs(dirname)
@@ -48,7 +47,7 @@ class RetailerController():
                 values = {'sCnpj': '',
                           'sRazaoSocial': '',
                           'sEstado': state,
-                          'sMunicipio': '0',
+                          'sMunicipio': city,
                           'sBandeira': '0',
                           'sProduto': product,
                           'sTipodePosto': '0',
@@ -82,9 +81,8 @@ class RetailerController():
                             if retailer_dom:
                                 row_dom = retailer_dom.find_all('tr')[2:-1]
                                 for row in row_dom:
-                                    cnpj = remove_punctuation(row.contents[1].contents[0].contents[2].attrs['value'])
                                     cod = row.contents[1].contents[0].contents[1].attrs['value'].strip()
-                                    self.download_queue.put((state, cnpj, cod))
+                                    self.download_queue.put({'state': state, 'cod': cod})
                     except Exception as ex:
                         log.error(ex.message)
 
@@ -96,13 +94,13 @@ class RetailerController():
         while True:
             item = self.download_queue.get()
             try:
-                values = {'Cod_inst': item[2],
-                          'estado': '0',
+                values = {'Cod_inst': item['cod'],
+                          'estado': item['state'],
                           'municipio': '0'}
 
                 r = requests.get('http://www.anp.gov.br/postos/resultado.asp', data=values, headers=self.headers, stream=True)
                 if r.status_code == requests.codes.ok:
-                    filename = os.path.join(self.data_dir, item[0], item[1])
+                    filename = os.path.join(self.data_dir, item['state'], item['cod'] + '.retail')
                     with open(filename, 'wb') as fd:
                         for chunk in r.iter_content(8192):
                             fd.write(chunk)
@@ -119,10 +117,10 @@ class RetailerController():
             t.start()
 
         for state in state_set:
-            dirname = os.path.join(self.data_dir, state)
-            files = os.listdir(dirname)
+            dir_name = os.path.join(self.data_dir, state)
+            files = glob.glob1(dir_name, '*.retail')
             for f in files:
-                self.retailer_queue.put(os.path.join(dirname, f))
+                self.retailer_queue.put(os.path.join(self.data_dir, state, f))
 
         self.retailer_queue.join()
 

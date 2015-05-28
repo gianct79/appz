@@ -18,12 +18,12 @@ def main():
                         help='Federation units to process',
                         required=True)
 
-    parser.add_argument('-r', '--retailer', action='store_true',
-                        help='Process retailers data',
-                        required=False)
-
     parser.add_argument('-p', '--price', action='store_true',
                         help='Process price data',
+                        required=False)
+
+    parser.add_argument('-r', '--retailer', action='store_true',
+                        help='Process retailers data',
                         required=False)
 
     parser.add_argument('-l', '--location', action='store_true',
@@ -32,16 +32,6 @@ def main():
 
     args = parser.parse_args()
     state_set = set(args.uf)
-
-    if args.retailer:
-        retailer_ctrl = RetailerController()
-
-        # product_set = set(map(lambda x: x[0], PRODUCT_TYPES.values()))
-        # product_set = [PRODUCT_TYPES[u'GASOLINA C COMUM'][0]]
-        product_set = ['0']
-
-        # retailer_ctrl.download_retailers(state_set, product_set)
-        retailer_ctrl.process_retailers(state_set)
 
     if args.price:
         price_ctrl = PriceController()
@@ -52,7 +42,16 @@ def main():
         price_ctrl.download_prices(state_set, product_set)
         price_ctrl.process_prices(state_set)
 
+        if args.retailer:
+            retailer_ctrl = RetailerController()
+
+            # product_set = set(map(lambda x: x[0], PRODUCT_TYPES.values()))
+            # product_set = [PRODUCT_TYPES[u'GASOLINA C COMUM'][0]]
+            product_set = ['0']
+
+            retailer_ctrl.download_retailers(price_ctrl.city_map, product_set)
+            retailer_ctrl.process_retailers(state_set)
+
     if args.location:
         location_ctrl = LocationController()
-
         location_ctrl.process_retailers()
