@@ -1,5 +1,5 @@
-anp_reader
-=============
+ANP Reader
+==========
 
 Brazilian ANP gas station and price processor.
 
@@ -23,7 +23,7 @@ Usage
       -h, --help            show this help message and exit
 
 License
---------
+-------
 
 Copyleft 2015 GTO Inc. All rights reversed. Licensed under MIT_.
 
