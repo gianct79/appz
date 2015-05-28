@@ -14,7 +14,7 @@ from setuptools import setup
 from setuptools import find_packages
 import subprocess
 
-project_name = 'anp_reader'
+project_name = 'ANP Reader'
 __version__ = __import__(project_name).__version__
 __author__ = __import__(project_name).__author__
 __author_email__ = __import__(project_name).__author_email__
