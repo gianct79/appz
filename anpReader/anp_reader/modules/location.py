@@ -13,7 +13,7 @@ from anp_reader import log
 
 class LocationController:
     def __init__(self):
-        self.data_dir = tempfile.tempdir
+        self.data_dir = os.path.join(tempfile.tempdir, 'retailers')
 
         self.retailer_queue = Queue.Queue()
 
