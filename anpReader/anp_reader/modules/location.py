@@ -59,21 +59,23 @@ class LocationController:
                 if retailer.get('location', None) is not None:
                     continue
 
-                full_address = retailer['address'] + ', ' + retailer['city'] + ', BRASIL'
-                url = 'https://maps.googleapis.com/maps/api/geocode/json?address=%s&key=AIzaSyCs7WX-nxB0mmLmHG8mXrPRSYV' \
-                      '-zfbXsaM' % full_address
+                full_address = '%s, %s, BRASIL' % (retailer['address'].replace('\'', ''), retailer['city'].replace('\'', ''))
 
-                r = requests.get(url, headers=self.headers)
+                url = 'https://maps.googleapis.com/maps/api/geocode/json'
+                params = {'address': full_address, 'key': 'AIzaSyCs7WX-nxB0mmLmHG8mXrPRSYV-zfbXsaM'}
+
+                r = requests.get(url, params=params, headers=self.headers)
                 if r.status_code == requests.codes.ok:
                     address = r.json()
                     if address['status'] == 'OK':
                         retailer['location'] = address['results'][0]['geometry']['location']
                         retailer['formatted_address'] = address['results'][0]['formatted_address']
 
-                self.retailer_lock.acquire()
-                self.retailer_map[key] = retailer
-                self.retailer_lock.release()
+                    self.retailer_lock.acquire()
+                    self.retailer_map[key] = retailer
+                    self.retailer_lock.release()
             except Exception as ex:
                 log.error(ex.message)
+
             finally:
                 self.retailer_queue.task_done()
