@@ -11,7 +11,7 @@ import requests
 
 from anp_reader import log
 from anp_reader.modules.product import ANP_CODES
-from anp_reader.modules.util import count_weeks, remove_accents, state_map
+from anp_reader.modules.util import count_weeks, state_map
 
 
 class PriceController:
@@ -73,12 +73,17 @@ class PriceController:
                         state = state_map[row_dom.contents[0].text.strip().lower()]
                         if state not in state_set:
                             continue
+
+                        price = float(row_dom.contents[2].text.strip().replace(',', '.'))
+                        price_min = float(row_dom.contents[4].text.strip().replace(',', '.'))
+                        price_max = float(row_dom.contents[5].text.strip().replace(',', '.'))
+
                         self.state_lock.acquire()
                         state_info = self.state_map.get(state, {'prices': {}})
                         price_info = {
-                            'price': float(row_dom.contents[2].text.strip().replace(',', '.')),
-                            'price_min': float(row_dom.contents[4].text.strip().replace(',', '.')),
-                            'price_max': float(row_dom.contents[5].text.strip().replace(',', '.'))
+                            'price': price,
+                            'price_min': price_min,
+                            'price_max': price_max
                         }
                         state_info['prices'][ANP_CODES[product]] = price_info
                         self.state_map[state] = state_info
@@ -157,16 +162,20 @@ class PriceController:
                         city_code = row_dom.contents[0].contents[0].attrs['href']
                         i, j = city_code.find('\''), city_code.rfind('*')
                         city_code = city_code[i + 1:j]
-                        city_name = remove_accents(row_dom.contents[0].text.strip().upper())
+                        city_name = row_dom.contents[0].text.strip().upper()
+                        price = float(row_dom.contents[2].text.strip().replace(',', '.'))
+                        price_min = float(row_dom.contents[4].text.strip().replace(',', '.'))
+                        price_max = float(row_dom.contents[5].text.strip().replace(',', '.'))
+
                         self.city_lock.acquire()
                         city_info = self.city_map.get(city_code, {
                             'name': city_name,
                             'state': item['state'].upper(),
                             'prices': {}})
                         price_info = {
-                            'price': float(row_dom.contents[2].text.strip().replace(',', '.')),
-                            'price_min': float(row_dom.contents[4].text.strip().replace(',', '.')),
-                            'price_max': float(row_dom.contents[5].text.strip().replace(',', '.'))
+                            'price': price,
+                            'price_min': price_min,
+                            'price_max': price_max
                         }
                         city_info['prices'][ANP_CODES[product]] = price_info
                         self.city_map[city_code] = city_info

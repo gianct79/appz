@@ -159,7 +159,7 @@ class RetailerController:
                         'company_name': row_dom[5].contents[2].text.strip().upper(),
                         'trade_name': row_dom[6].contents[2].text.strip().upper(),
                         'address': address.upper(),
-                        'city': remove_accents(row_dom[10].contents[2].text.strip().upper()),
+                        'city': row_dom[10].contents[2].text.strip().upper(),
                         'zip': row_dom[11].contents[2].text.strip(),
                         # 'brand': None if pending else row_dom[14].contents[2].text.strip().upper()
                         'brand': row_dom[14].contents[2].text.strip().upper()
