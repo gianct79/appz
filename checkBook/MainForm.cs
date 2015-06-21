@@ -12,9 +12,12 @@ namespace checkBook
 {
     public partial class MainForm : Form
     {
+        Checkbook checkbook;
+
         public MainForm()
         {
             InitializeComponent();
+            this.checkbook = new Checkbook();
         }
 
         private void fileExitMenu_Click(object sender, EventArgs e)
@@ -158,6 +161,43 @@ namespace checkBook
                 }
             }
             return ruler;
+        }
+
+        private void checkListView_RetrieveVirtualItem(object sender, RetrieveVirtualItemEventArgs e)
+        {
+            Check check = this.checkbook[e.ItemIndex];
+
+            e.Item = new ListViewItem();
+            e.Item.Text = check.Number;
+            e.Item.SubItems.Add(new ListViewItem.ListViewSubItem { Text = check.Date.ToLongDateString() });
+            e.Item.SubItems.Add(new ListViewItem.ListViewSubItem { Text = check.Value.ToString() });
+            e.Item.SubItems.Add(new ListViewItem.ListViewSubItem { Text = check.PayTo });
+        }
+
+        private void editAddMenu_Click(object sender, EventArgs e)
+        {
+            this.checkbook.Add(new Check { Date = DateTime.Now, Value = Decimal.One, PayTo = string.Empty, Place = string.Empty });
+            this.checkListView.VirtualListSize = this.checkbook.Count;
+        }
+
+        private void checkListView_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Check check = this.checkbook[(sender as ListView).SelectedIndices[0]];
+
+            this.textNumber.Text = check.Number;
+            this.textDate.Value = check.Date;
+            this.textValue.Text = check.Value.ToString();
+            this.textPayTo.Text = check.PayTo;
+        }
+
+        private void textPayTo_Leave(object sender, EventArgs e)
+        {
+            Check check = this.checkbook[this.checkListView.SelectedIndices[0]];
+
+            check.Number = this.textNumber.Text;
+            check.Date = this.textDate.Value;
+            check.Value = Decimal.Parse(this.textValue.Text);
+            check.PayTo = this.textPayTo.Text;
         }
     }
 }
