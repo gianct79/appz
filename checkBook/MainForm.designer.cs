@@ -32,57 +32,49 @@ namespace checkBook
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.mainMenu = new System.Windows.Forms.MenuStrip();
             this.fileMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.fileOpenMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem0 = new System.Windows.Forms.ToolStripSeparator();
             this.fileSaveMenu = new System.Windows.Forms.ToolStripMenuItem();
-            this.fileSaveAsMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.filePrintMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
             this.fileExitMenu = new System.Windows.Forms.ToolStripMenuItem();
-            this.editMenu = new System.Windows.Forms.ToolStripMenuItem();
-            this.editAddMenu = new System.Windows.Forms.ToolStripMenuItem();
-            this.editDeleteMenu = new System.Windows.Forms.ToolStripMenuItem();
-            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.checkListView = new System.Windows.Forms.ListView();
-            this.checkNumber = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.checkDate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.checkValue = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.checkPay = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.checkFormView = new System.Windows.Forms.Panel();
-            this.textDate = new System.Windows.Forms.DateTimePicker();
-            this.textPayTo = new System.Windows.Forms.TextBox();
-            this.textValue = new System.Windows.Forms.TextBox();
-            this.textNumber = new System.Windows.Forms.TextBox();
-            this.labelPayTo = new System.Windows.Forms.Label();
-            this.labelValue = new System.Windows.Forms.Label();
-            this.labelDate = new System.Windows.Forms.Label();
-            this.labelNumber = new System.Windows.Forms.Label();
+            this.checkGridView = new System.Windows.Forms.DataGridView();
+            this.checkbookBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.statusBar = new System.Windows.Forms.StatusStrip();
+            this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.Number = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Value = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Date = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Place = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.PayTo = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.mainMenu.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
-            this.splitContainer1.Panel1.SuspendLayout();
-            this.splitContainer1.Panel2.SuspendLayout();
-            this.splitContainer1.SuspendLayout();
-            this.checkFormView.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.checkGridView)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.checkbookBindingSource)).BeginInit();
+            this.statusBar.SuspendLayout();
             this.SuspendLayout();
             // 
             // mainMenu
             // 
             this.mainMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fileMenu,
-            this.editMenu});
+            this.fileMenu});
             this.mainMenu.Location = new System.Drawing.Point(0, 0);
             this.mainMenu.Name = "mainMenu";
-            this.mainMenu.Size = new System.Drawing.Size(404, 24);
+            this.mainMenu.Size = new System.Drawing.Size(624, 24);
             this.mainMenu.TabIndex = 1;
             this.mainMenu.Text = "menuStrip1";
             // 
             // fileMenu
             // 
             this.fileMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.fileOpenMenu,
+            this.toolStripMenuItem0,
             this.fileSaveMenu,
-            this.fileSaveAsMenu,
             this.toolStripMenuItem1,
             this.filePrintMenu,
             this.toolStripMenuItem2,
@@ -91,235 +83,153 @@ namespace checkBook
             this.fileMenu.Size = new System.Drawing.Size(37, 20);
             this.fileMenu.Text = "File";
             // 
+            // fileOpenMenu
+            // 
+            this.fileOpenMenu.Name = "fileOpenMenu";
+            this.fileOpenMenu.Size = new System.Drawing.Size(108, 22);
+            this.fileOpenMenu.Text = "Open";
+            this.fileOpenMenu.Click += new System.EventHandler(this.fileOpenMenu_Click);
+            // 
+            // toolStripMenuItem0
+            // 
+            this.toolStripMenuItem0.Name = "toolStripMenuItem0";
+            this.toolStripMenuItem0.Size = new System.Drawing.Size(105, 6);
+            // 
             // fileSaveMenu
             // 
             this.fileSaveMenu.Name = "fileSaveMenu";
-            this.fileSaveMenu.Size = new System.Drawing.Size(123, 22);
+            this.fileSaveMenu.Size = new System.Drawing.Size(108, 22);
             this.fileSaveMenu.Text = "Save";
-            // 
-            // fileSaveAsMenu
-            // 
-            this.fileSaveAsMenu.Name = "fileSaveAsMenu";
-            this.fileSaveAsMenu.Size = new System.Drawing.Size(123, 22);
-            this.fileSaveAsMenu.Text = "Save As...";
+            this.fileSaveMenu.Click += new System.EventHandler(this.fileSaveMenu_Click);
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(120, 6);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(105, 6);
             // 
             // filePrintMenu
             // 
             this.filePrintMenu.Name = "filePrintMenu";
-            this.filePrintMenu.Size = new System.Drawing.Size(123, 22);
+            this.filePrintMenu.Size = new System.Drawing.Size(108, 22);
             this.filePrintMenu.Text = "Print...";
             this.filePrintMenu.Click += new System.EventHandler(this.filePrintMenu_Click);
             // 
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(120, 6);
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(105, 6);
             // 
             // fileExitMenu
             // 
             this.fileExitMenu.Name = "fileExitMenu";
-            this.fileExitMenu.Size = new System.Drawing.Size(123, 22);
+            this.fileExitMenu.Size = new System.Drawing.Size(108, 22);
             this.fileExitMenu.Text = "Exit";
             this.fileExitMenu.Click += new System.EventHandler(this.fileExitMenu_Click);
             // 
-            // editMenu
+            // checkGridView
             // 
-            this.editMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.editAddMenu,
-            this.editDeleteMenu});
-            this.editMenu.Name = "editMenu";
-            this.editMenu.Size = new System.Drawing.Size(39, 20);
-            this.editMenu.Text = "Edit";
+            this.checkGridView.AutoGenerateColumns = false;
+            this.checkGridView.BackgroundColor = System.Drawing.SystemColors.ControlDark;
+            this.checkGridView.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.checkGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.checkGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Number,
+            this.Value,
+            this.Date,
+            this.Place,
+            this.PayTo});
+            this.checkGridView.DataSource = this.checkbookBindingSource;
+            this.checkGridView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.checkGridView.Location = new System.Drawing.Point(0, 24);
+            this.checkGridView.Name = "checkGridView";
+            this.checkGridView.Size = new System.Drawing.Size(624, 235);
+            this.checkGridView.TabIndex = 5;
+            this.checkGridView.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.checkGridView_DataError);
             // 
-            // editAddMenu
+            // checkbookBindingSource
             // 
-            this.editAddMenu.Name = "editAddMenu";
-            this.editAddMenu.Size = new System.Drawing.Size(152, 22);
-            this.editAddMenu.Text = "Add";
-            this.editAddMenu.Click += new System.EventHandler(this.editAddMenu_Click);
-            // 
-            // editDeleteMenu
-            // 
-            this.editDeleteMenu.Name = "editDeleteMenu";
-            this.editDeleteMenu.Size = new System.Drawing.Size(152, 22);
-            this.editDeleteMenu.Text = "Delete";
-            // 
-            // splitContainer1
-            // 
-            this.splitContainer1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer1.Location = new System.Drawing.Point(0, 24);
-            this.splitContainer1.Name = "splitContainer1";
-            this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            // 
-            // splitContainer1.Panel1
-            // 
-            this.splitContainer1.Panel1.Controls.Add(this.checkListView);
-            // 
-            // splitContainer1.Panel2
-            // 
-            this.splitContainer1.Panel2.Controls.Add(this.checkFormView);
-            this.splitContainer1.Size = new System.Drawing.Size(404, 275);
-            this.splitContainer1.SplitterDistance = 138;
-            this.splitContainer1.TabIndex = 3;
-            // 
-            // checkListView
-            // 
-            this.checkListView.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.checkListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.checkNumber,
-            this.checkDate,
-            this.checkValue,
-            this.checkPay});
-            this.checkListView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.checkListView.FullRowSelect = true;
-            this.checkListView.GridLines = true;
-            this.checkListView.Location = new System.Drawing.Point(0, 0);
-            this.checkListView.Name = "checkListView";
-            this.checkListView.Size = new System.Drawing.Size(402, 136);
-            this.checkListView.TabIndex = 0;
-            this.checkListView.UseCompatibleStateImageBehavior = false;
-            this.checkListView.View = System.Windows.Forms.View.Details;
-            this.checkListView.VirtualMode = true;
-            this.checkListView.RetrieveVirtualItem += new System.Windows.Forms.RetrieveVirtualItemEventHandler(this.checkListView_RetrieveVirtualItem);
-            this.checkListView.SelectedIndexChanged += new System.EventHandler(this.checkListView_SelectedIndexChanged);
-            // 
-            // checkNumber
-            // 
-            this.checkNumber.Text = "Number";
-            // 
-            // checkDate
-            // 
-            this.checkDate.Text = "Date";
-            this.checkDate.Width = 73;
-            // 
-            // checkValue
-            // 
-            this.checkValue.Text = "Value (R$)";
-            this.checkValue.Width = 89;
-            // 
-            // checkPay
-            // 
-            this.checkPay.Text = "Pay To";
-            this.checkPay.Width = 139;
-            // 
-            // checkFormView
-            // 
-            this.checkFormView.AutoScroll = true;
-            this.checkFormView.Controls.Add(this.textDate);
-            this.checkFormView.Controls.Add(this.textPayTo);
-            this.checkFormView.Controls.Add(this.textValue);
-            this.checkFormView.Controls.Add(this.textNumber);
-            this.checkFormView.Controls.Add(this.labelPayTo);
-            this.checkFormView.Controls.Add(this.labelValue);
-            this.checkFormView.Controls.Add(this.labelDate);
-            this.checkFormView.Controls.Add(this.labelNumber);
-            this.checkFormView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.checkFormView.Location = new System.Drawing.Point(0, 0);
-            this.checkFormView.Name = "checkFormView";
-            this.checkFormView.Size = new System.Drawing.Size(402, 131);
-            this.checkFormView.TabIndex = 0;
-            // 
-            // textDate
-            // 
-            this.textDate.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.textDate.Location = new System.Drawing.Point(64, 37);
-            this.textDate.Name = "textDate";
-            this.textDate.Size = new System.Drawing.Size(100, 20);
-            this.textDate.TabIndex = 5;
-            // 
-            // textPayTo
-            // 
-            this.textPayTo.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.textPayTo.Location = new System.Drawing.Point(64, 89);
-            this.textPayTo.Name = "textPayTo";
-            this.textPayTo.Size = new System.Drawing.Size(327, 20);
-            this.textPayTo.TabIndex = 7;
-            this.textPayTo.Leave += new System.EventHandler(this.textPayTo_Leave);
-            // 
-            // textValue
-            // 
-            this.textValue.Location = new System.Drawing.Point(64, 63);
-            this.textValue.Name = "textValue";
-            this.textValue.Size = new System.Drawing.Size(100, 20);
-            this.textValue.TabIndex = 6;
-            // 
-            // textNumber
-            // 
-            this.textNumber.Location = new System.Drawing.Point(64, 11);
-            this.textNumber.Name = "textNumber";
-            this.textNumber.Size = new System.Drawing.Size(100, 20);
-            this.textNumber.TabIndex = 4;
-            // 
-            // labelPayTo
-            // 
-            this.labelPayTo.AutoSize = true;
-            this.labelPayTo.Location = new System.Drawing.Point(11, 96);
-            this.labelPayTo.Name = "labelPayTo";
-            this.labelPayTo.Size = new System.Drawing.Size(40, 13);
-            this.labelPayTo.TabIndex = 3;
-            this.labelPayTo.Text = "Pay to:";
-            // 
-            // labelValue
-            // 
-            this.labelValue.AutoSize = true;
-            this.labelValue.Location = new System.Drawing.Point(10, 70);
-            this.labelValue.Name = "labelValue";
-            this.labelValue.Size = new System.Drawing.Size(37, 13);
-            this.labelValue.TabIndex = 2;
-            this.labelValue.Text = "Value:";
-            // 
-            // labelDate
-            // 
-            this.labelDate.AutoSize = true;
-            this.labelDate.Location = new System.Drawing.Point(11, 43);
-            this.labelDate.Name = "labelDate";
-            this.labelDate.Size = new System.Drawing.Size(33, 13);
-            this.labelDate.TabIndex = 1;
-            this.labelDate.Text = "Date:";
-            // 
-            // labelNumber
-            // 
-            this.labelNumber.AutoSize = true;
-            this.labelNumber.Location = new System.Drawing.Point(11, 18);
-            this.labelNumber.Name = "labelNumber";
-            this.labelNumber.Size = new System.Drawing.Size(47, 13);
-            this.labelNumber.TabIndex = 0;
-            this.labelNumber.Text = "Number:";
+            this.checkbookBindingSource.CurrentChanged += new System.EventHandler(this.checkbookBindingSource_CurrentChanged);
             // 
             // statusBar
             // 
-            this.statusBar.Location = new System.Drawing.Point(0, 299);
+            this.statusBar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.statusLabel});
+            this.statusBar.Location = new System.Drawing.Point(0, 259);
             this.statusBar.Name = "statusBar";
-            this.statusBar.Size = new System.Drawing.Size(404, 22);
-            this.statusBar.TabIndex = 4;
-            this.statusBar.Text = "Ready";
+            this.statusBar.Size = new System.Drawing.Size(624, 22);
+            this.statusBar.TabIndex = 6;
+            this.statusBar.Text = "statusStrip1";
+            // 
+            // statusLabel
+            // 
+            this.statusLabel.Name = "statusLabel";
+            this.statusLabel.Size = new System.Drawing.Size(39, 17);
+            this.statusLabel.Text = "Status";
+            // 
+            // Number
+            // 
+            this.Number.DataPropertyName = "Number";
+            this.Number.HeaderText = "Number";
+            this.Number.MaxInputLength = 20;
+            this.Number.MinimumWidth = 20;
+            this.Number.Name = "Number";
+            // 
+            // Value
+            // 
+            this.Value.DataPropertyName = "Value";
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle1.Format = "C2";
+            dataGridViewCellStyle1.NullValue = null;
+            this.Value.DefaultCellStyle = dataGridViewCellStyle1;
+            this.Value.HeaderText = "Value";
+            this.Value.MaxInputLength = 10;
+            this.Value.Name = "Value";
+            // 
+            // Date
+            // 
+            this.Date.DataPropertyName = "Date";
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle2.Format = "d";
+            dataGridViewCellStyle2.NullValue = null;
+            this.Date.DefaultCellStyle = dataGridViewCellStyle2;
+            this.Date.HeaderText = "Date";
+            this.Date.MaxInputLength = 10;
+            this.Date.Name = "Date";
+            // 
+            // Place
+            // 
+            this.Place.DataPropertyName = "Place";
+            this.Place.HeaderText = "Place";
+            this.Place.MaxInputLength = 20;
+            this.Place.MinimumWidth = 50;
+            this.Place.Name = "Place";
+            this.Place.Width = 150;
+            // 
+            // PayTo
+            // 
+            this.PayTo.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.PayTo.DataPropertyName = "PayTo";
+            this.PayTo.HeaderText = "PayTo";
+            this.PayTo.MaxInputLength = 100;
+            this.PayTo.Name = "PayTo";
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(404, 321);
-            this.Controls.Add(this.splitContainer1);
-            this.Controls.Add(this.statusBar);
+            this.ClientSize = new System.Drawing.Size(624, 281);
+            this.Controls.Add(this.checkGridView);
             this.Controls.Add(this.mainMenu);
+            this.Controls.Add(this.statusBar);
             this.MainMenuStrip = this.mainMenu;
             this.Name = "MainForm";
             this.Text = "Checkbook";
             this.mainMenu.ResumeLayout(false);
             this.mainMenu.PerformLayout();
-            this.splitContainer1.Panel1.ResumeLayout(false);
-            this.splitContainer1.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
-            this.splitContainer1.ResumeLayout(false);
-            this.checkFormView.ResumeLayout(false);
-            this.checkFormView.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.checkGridView)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.checkbookBindingSource)).EndInit();
+            this.statusBar.ResumeLayout(false);
+            this.statusBar.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -330,29 +240,20 @@ namespace checkBook
         private System.Windows.Forms.MenuStrip mainMenu;
         private System.Windows.Forms.ToolStripMenuItem fileMenu;
         private System.Windows.Forms.ToolStripMenuItem fileSaveMenu;
-        private System.Windows.Forms.ToolStripMenuItem fileSaveAsMenu;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem0;
+        private System.Windows.Forms.ToolStripMenuItem fileOpenMenu;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem filePrintMenu;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
         private System.Windows.Forms.ToolStripMenuItem fileExitMenu;
-        private System.Windows.Forms.ToolStripMenuItem editMenu;
-        private System.Windows.Forms.ToolStripMenuItem editAddMenu;
-        private System.Windows.Forms.ToolStripMenuItem editDeleteMenu;
-        private System.Windows.Forms.SplitContainer splitContainer1;
-        private System.Windows.Forms.ListView checkListView;
-        private System.Windows.Forms.ColumnHeader checkNumber;
-        private System.Windows.Forms.ColumnHeader checkDate;
-        private System.Windows.Forms.ColumnHeader checkValue;
-        private System.Windows.Forms.ColumnHeader checkPay;
+        private System.Windows.Forms.DataGridView checkGridView;
+        private System.Windows.Forms.BindingSource checkbookBindingSource;
         private System.Windows.Forms.StatusStrip statusBar;
-        private System.Windows.Forms.Panel checkFormView;
-        private System.Windows.Forms.DateTimePicker textDate;
-        private System.Windows.Forms.TextBox textPayTo;
-        private System.Windows.Forms.TextBox textValue;
-        private System.Windows.Forms.TextBox textNumber;
-        private System.Windows.Forms.Label labelPayTo;
-        private System.Windows.Forms.Label labelValue;
-        private System.Windows.Forms.Label labelDate;
-        private System.Windows.Forms.Label labelNumber;
+        private System.Windows.Forms.ToolStripStatusLabel statusLabel;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Number;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Value;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Date;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Place;
+        private System.Windows.Forms.DataGridViewTextBoxColumn PayTo;
     }
 }

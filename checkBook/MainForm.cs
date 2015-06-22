@@ -6,23 +6,94 @@ using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Drawing.Printing;
+using System.IO;
 using System.Windows.Forms;
+using System.Xml.Serialization;
 
 namespace checkBook
 {
     public partial class MainForm : Form
     {
-        Checkbook checkbook;
+        private Checkbook checkbook;
 
         public MainForm()
         {
             InitializeComponent();
             this.checkbook = new Checkbook();
+            this.checkbookBindingSource.DataSource = this.checkbook;
         }
 
         private void fileExitMenu_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void fileOpenMenu_Click(object sender, EventArgs e)
+        {
+            Cursor.Current = Cursors.WaitCursor;
+            using (FileDialog openDialog = new OpenFileDialog())
+            {
+                openDialog.Filter = "XML Files (*.xml)|*.xml";
+                if (openDialog.ShowDialog() == DialogResult.OK)
+                {
+                    try
+                    {
+                        var xml = new XmlSerializer(typeof(Checkbook));
+                        using (StreamReader sr = File.OpenText(openDialog.FileName))
+                        {
+                            this.checkbook = (Checkbook)xml.Deserialize(sr);
+
+                            this.checkbookBindingSource.DataSource = null;
+                            this.checkbookBindingSource.DataSource = this.checkbook;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        this.statusLabel.Text = ex.Message;
+                    }
+                }
+            }
+            Cursor.Current = Cursors.Default;
+        }
+
+        private void fileSaveMenu_Click(object sender, EventArgs e)
+        {
+            Cursor.Current = Cursors.WaitCursor;
+            using (FileDialog saveDialog = new SaveFileDialog())
+            {
+                saveDialog.Filter = "XML Files (*.xml)|*.xml";
+                if (saveDialog.ShowDialog() == DialogResult.OK)
+                {
+                    try
+                    {
+                        var xml = new XmlSerializer(typeof(Checkbook));
+                        using (StreamWriter sw = File.CreateText(saveDialog.FileName))
+                        {
+                            xml.Serialize(sw, this.checkbook);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        this.statusLabel.Text = ex.Message;
+                    }
+                }
+            }
+            Cursor.Current = Cursors.Default;
+        }
+
+        private void checkGridView_DataError(object sender, DataGridViewDataErrorEventArgs e)
+        {
+            this.statusLabel.Text = e.Exception.Message;
+        }
+
+        private void checkbookBindingSource_CurrentChanged(object sender, EventArgs e)
+        {
+            Decimal sum = Decimal.Zero;
+            foreach (Check check in this.checkbook)
+            {
+                sum += check.Value;
+            }
+            this.statusLabel.Text = String.Format("Total {0:C}", sum);
         }
 
         private void filePrintMenu_Click(object sender, EventArgs e)
@@ -60,6 +131,7 @@ namespace checkBook
 
         private void printDocument_PrintPage(object sender, PrintPageEventArgs e)
         {
+
             //int srcX = e.MarginBounds.X;
             //int srcY = e.MarginBounds.Y;
 
@@ -161,43 +233,6 @@ namespace checkBook
                 }
             }
             return ruler;
-        }
-
-        private void checkListView_RetrieveVirtualItem(object sender, RetrieveVirtualItemEventArgs e)
-        {
-            Check check = this.checkbook[e.ItemIndex];
-
-            e.Item = new ListViewItem();
-            e.Item.Text = check.Number;
-            e.Item.SubItems.Add(new ListViewItem.ListViewSubItem { Text = check.Date.ToLongDateString() });
-            e.Item.SubItems.Add(new ListViewItem.ListViewSubItem { Text = check.Value.ToString() });
-            e.Item.SubItems.Add(new ListViewItem.ListViewSubItem { Text = check.PayTo });
-        }
-
-        private void editAddMenu_Click(object sender, EventArgs e)
-        {
-            this.checkbook.Add(new Check { Date = DateTime.Now, Value = Decimal.One, PayTo = string.Empty, Place = string.Empty });
-            this.checkListView.VirtualListSize = this.checkbook.Count;
-        }
-
-        private void checkListView_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            Check check = this.checkbook[(sender as ListView).SelectedIndices[0]];
-
-            this.textNumber.Text = check.Number;
-            this.textDate.Value = check.Date;
-            this.textValue.Text = check.Value.ToString();
-            this.textPayTo.Text = check.PayTo;
-        }
-
-        private void textPayTo_Leave(object sender, EventArgs e)
-        {
-            Check check = this.checkbook[this.checkListView.SelectedIndices[0]];
-
-            check.Number = this.textNumber.Text;
-            check.Date = this.textDate.Value;
-            check.Value = Decimal.Parse(this.textValue.Text);
-            check.PayTo = this.textPayTo.Text;
         }
     }
 }

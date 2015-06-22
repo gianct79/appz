@@ -7,16 +7,22 @@ using System.Collections.Generic;
 
 namespace checkBook
 {
-    class Check
+    public class Check
     {
         public string Number { get; set; }
         public Decimal Value { get; set; }
         public string PayTo { get; set; }
         public string Place { get; set; }
         public DateTime Date { get; set; }
+
+        public Check()
+        {
+            this.Value = Decimal.One;
+            this.Date = DateTime.Now;
+        }
     }
 
-    class Checkbook : List<Check>
+    public class Checkbook : List<Check>
     {
     }
 }
