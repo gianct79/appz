@@ -84,11 +84,16 @@ namespace checkBook
             {
                 sb.Append(Extension.ToLongString(d));
                 sb.Append(" mil");
+                if (r > 0)
+                {
+                    if (r < 100 || r % 100 == 0)
+                        sb.Append(" e ");
+                    else
+                        sb.Append(", ");
+                }
             }
             if (r > 0)
             {
-                if (sb.Length > 0)
-                    sb.Append(" e ");
                 sb.Append(Extension.ToLongString(r));
             }
 
