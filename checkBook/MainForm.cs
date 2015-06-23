@@ -93,7 +93,7 @@ namespace checkBook
             {
                 sum += check.Value;
             }
-            this.statusLabel.Text = String.Format("Total {0:C} ({1}).", sum, sum.ToLongString());
+            this.statusLabel.Text = String.Format("Total {0:C}: {1}.", sum, sum.ToLongString());
         }
 
         private void filePrintMenu_Click(object sender, EventArgs e)
