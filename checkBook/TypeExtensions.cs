@@ -43,9 +43,7 @@ namespace checkBook
             }
 
             if (d < 20)
-            {
                 sb.Append(units[d]);
-            }
             else
             {
                 int u;
@@ -93,9 +91,7 @@ namespace checkBook
                 }
             }
             if (r > 0)
-            {
                 sb.Append(Extension.ToLongString(r));
-            }
 
             return sb.Append(" reais").ToString();
         }
