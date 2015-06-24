@@ -66,10 +66,10 @@ namespace checkBook
     {
         public static string ToLongString(this Decimal value)
         {
-            if (value <= Decimal.Zero || value > new Decimal(999999.99))
-                return string.Empty;
-
             int v = Decimal.ToInt32(value);
+
+            if (v <= 0 || value > 999999)
+                return string.Empty;
 
             if (v == 1)
                 return "um real";
@@ -80,8 +80,9 @@ namespace checkBook
             int d = Math.DivRem(v, 1000, out r);
             if (d > 0)
             {
-                sb.Append(Extension.ToLongString(d));
-                sb.Append(" mil");
+                if (d > 1)
+                    sb.Append(Extension.ToLongString(d)).Append(" ");
+                sb.Append("mil");
                 if (r > 0)
                 {
                     if (r < 100 || r % 100 == 0)
