@@ -116,6 +116,7 @@ namespace checkBook
                         pageSettings.Margins.Bottom = 0;
                         pageSettings.Margins.Left = 0;
                         pageSettings.Margins.Right = 0;
+                        pageSettings.PaperSize = new PaperSize("Custom", 850, 1200);
 
                         printDocument.OriginAtMargins = true;
                         printDocument.DefaultPageSettings = pageSettings;
@@ -131,108 +132,50 @@ namespace checkBook
 
         private void printDocument_PrintPage(object sender, PrintPageEventArgs e)
         {
+            e.Graphics.PageUnit = GraphicsUnit.Millimeter;
 
-            //int srcX = e.MarginBounds.X;
-            //int srcY = e.MarginBounds.Y;
+            int y = 0;
+            int i = 0;
 
-            //int srcWidth = this.imageViewer.Image.Width - srcX;
-            //int srcHeight = this.imageViewer.Image.Height - srcY;
+            while (i < 4)
+            {
+                Image check = DrawCheck(this.checkbook[i], e.Graphics.DpiX, e.Graphics.DpiY);
+                e.Graphics.DrawImage(check, 0, y);
 
-            //e.Graphics.DrawImage(this.imageViewer.Image, e.MarginBounds, srcX, srcY, srcWidth, srcHeight, GraphicsUnit.Pixel);
+                y += 76;
+                i += 1;
+            }
 
             e.HasMorePages = false;
         }
 
-        private void CreateBitmap(string text, int width, int height, int resX, int resY)
+        private Image DrawCheck(Check check, float dpiX, float dpiY)
         {
-            int resX4 = resX / 4;
-            int resY4 = resY / 4;
-
-            Bitmap bitmap = new Bitmap(width, height, PixelFormat.Format32bppArgb);
-            bitmap.SetResolution(resX, resY);
-
-            using (Graphics g = Graphics.FromImage(bitmap))
-            {
-                g.FillRectangle(Brushes.White, 0, 0, width, height);
-
-                int centerV = width / 2;
-                int centerH = height / 2;
-
-                for (int x = centerV; x > 0; x -= resX4)
-                    g.DrawLine(Pens.Black, x, 0, x, height);
-
-                for (int x = centerV + resX4; x < width; x += resX4)
-                    g.DrawLine(Pens.Black, x, 0, x, height);
-
-                for (int y = centerH; y > 0; y -= resY4)
-                    g.DrawLine(Pens.Black, 0, y, width, y);
-
-                for (int y = centerH + resY4; y < height; y += resY4)
-                    g.DrawLine(Pens.Black, 0, y, width, y);
-
-                g.DrawLine(Pens.Gray, 0, 0, width, height);
-                g.DrawLine(Pens.Gray, width, 0, 0, height);
-
-                g.DrawEllipse(Pens.Black, centerV - resX, centerH - resY, resX * 2, resY * 2);
-
-                FontFamily fontFamily = new FontFamily("Arial");
-                using (Font font = new Font(fontFamily, resX * 0.16f, FontStyle.Regular, GraphicsUnit.Pixel))
-                {
-                    g.DrawString(text, font, Brushes.Black, centerV - resX * 2, centerH - resY);
-                }
-
-                using (Image ruler = CreateRuler(resX, resY))
-                {
-                    ruler.RotateFlip(RotateFlipType.Rotate90FlipNone);
-                    g.DrawImage(ruler, width / 2, 0);
-
-                    ruler.RotateFlip(RotateFlipType.Rotate90FlipXY);
-                    g.DrawImage(ruler, 0, height / 2);
-
-                    ruler.RotateFlip(RotateFlipType.Rotate90FlipXY);
-                    g.DrawImage(ruler, width / 2, height - ruler.Height);
-
-                    ruler.RotateFlip(RotateFlipType.Rotate90FlipXY);
-                    g.DrawImage(ruler, width - ruler.Width, height / 2);
-                }
-            }
-        }
-
-        private Image CreateRuler(int resX, int resY)
-        {
-            Bitmap ruler = new Bitmap(resX * 3, resY / 4);
-            ruler.SetResolution(resX, resY);
+            Bitmap bitmap = new Bitmap(5100, 1800);
+            bitmap.SetResolution(dpiX, dpiY);
 
             FontFamily fontFamily = new FontFamily("Arial");
-            using (Font font = new Font(fontFamily, resX * 0.08f, FontStyle.Regular, GraphicsUnit.Pixel))
+            using (Font font = new Font(fontFamily, 4.0f, FontStyle.Regular, GraphicsUnit.Millimeter))
             {
-                Graphics g = Graphics.FromImage(ruler);
+                Graphics g = Graphics.FromImage(bitmap);
 
-                g.FillRectangle(Brushes.LightGray, 0, 0, ruler.Width, ruler.Height);
+                g.PageUnit = GraphicsUnit.Millimeter;
 
-                int x1, x2, y1, y2;
-                x1 = 0; x2 = ruler.Width; y1 = y2 = ruler.Height / 2;
+                g.DrawString(check.Value.ToString("F2"), font, Brushes.Black, 168, 12);
 
-                g.DrawLine(Pens.Black, x1, y1, x2, y2);
-                g.DrawString("<<< To paper edge <<<", font, Brushes.Black, x1, y1 - resY * 0.12f);
+                g.DrawString(check.Date.ToShortDateString(), font, Brushes.Black, 16, 18);
+                g.DrawString(check.Value.ToLongString(), font, Brushes.Black, 72, 18);
 
-                int resX2 = resX / 2;
-                int resX4 = resX / 4;
+                g.DrawString(check.Value.ToString("C"), font, Brushes.Black, 16, 24);
+                g.DrawString(check.PayTo, font, Brushes.Black, 54, 30);
 
-                for (int x = x1; x < x2; x++)
-                {
-                    if (x % resX4 == 0)
-                        g.DrawLine(Pens.Black, x, y1 - resY * 0.02f, x, y1 + resY * 0.02f);
-                    if (x % resX2 == 0)
-                        g.DrawLine(Pens.Black, x, y1 - resY * 0.04f, x, y1 + resY * 0.04f);
-                    if (x % resX == 0)
-                    {
-                        g.DrawLine(Pens.Black, x, y1 - resY * 0.08f, x, y1 + resY * 0.08f);
-                        g.DrawString((x / resX).ToString(), font, Brushes.Black, x, y1);
-                    }
-                }
+                g.DrawString(check.Place, font, Brushes.Black, 120, 36);
+                g.DrawString(check.Date.ToString("dd"), font, Brushes.Black, 153, 36);
+                g.DrawString(check.Date.ToString("MMMM"), font, Brushes.Black, 165, 36);
+                g.DrawString(check.Date.ToString("yy"), font, Brushes.Black, 198, 36);
             }
-            return ruler;
+
+            return bitmap;
         }
     }
 }
