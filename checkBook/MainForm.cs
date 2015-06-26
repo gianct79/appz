@@ -116,13 +116,13 @@ namespace checkBook
 
                         PageSettings pageSettings = new PageSettings(printDocument.PrinterSettings);
 
-                        pageSettings.Margins.Top = 0;
-                        pageSettings.Margins.Bottom = 0;
-                        pageSettings.Margins.Left = 0;
-                        pageSettings.Margins.Right = 0;
+                        //pageSettings.Margins.Top = 0;
+                        //pageSettings.Margins.Bottom = 0;
+                        //pageSettings.Margins.Left = 0;
+                        //pageSettings.Margins.Right = 0;
                         pageSettings.PaperSize = new PaperSize("Custom", 850, 1200);
 
-                        printDocument.OriginAtMargins = true;
+                        //printDocument.OriginAtMargins = true;
                         printDocument.DefaultPageSettings = pageSettings;
 
                         printDocument.PrintPage += new PrintPageEventHandler(printDocument_PrintPage);
@@ -169,16 +169,16 @@ namespace checkBook
 
                 g.DrawString(check.Date.ToShortDateString(), font, Brushes.Black, 16, 18);
                 g.DrawString(String.Format("\t*** {0} ***", check.Value.ToLongString()), font, Brushes.Black, new Rectangle(54, 18, 120, 24));
-                g.DrawString(String.Format("\t{0}", check.PayTo), font, Brushes.Black, new Rectangle(15, 36, 30, 24));
+                g.DrawString(String.Format("\t{0}", check.PayTo), font, Brushes.Black, new Rectangle(15, 30, 30, 30));
 
                 g.DrawString(check.Value.ToString("C"), font, Brushes.Black, 16, 24);
                 g.DrawString(check.PayTo, font, Brushes.Black, 54, 30);
 
-                g.DrawString(check.Place, font, Brushes.Black, 120, 36);
-                g.DrawString(check.Date.ToString("dd"), font, Brushes.Black, 153, 36);
+                g.DrawString(check.Place, font, Brushes.Black, new Rectangle(80, 36, 72, 12), new StringFormat { Alignment = StringAlignment.Far });
+                g.DrawString(check.Date.ToString("dd"), font, Brushes.Black, 156, 36);
 
                 g.DrawString(check.Date.ToString("MMMM"), font, Brushes.Black, new Rectangle(165, 36, 30, 12), new StringFormat { Alignment = StringAlignment.Center });
-                g.DrawString(check.Date.ToString("yy"), font, Brushes.Black, 198, 36);
+                g.DrawString(check.Date.ToString("yyyy"), font, Brushes.Black, 198, 36);
             }
 
             return bitmap;
