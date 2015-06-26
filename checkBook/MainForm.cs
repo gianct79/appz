@@ -6,7 +6,9 @@ using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Drawing.Printing;
+using System.Globalization;
 using System.IO;
+using System.Threading;
 using System.Windows.Forms;
 using System.Xml.Serialization;
 
@@ -19,6 +21,9 @@ namespace checkBook
         public MainForm()
         {
             InitializeComponent();
+
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("pt-BR");
+
             this.checkbook = new Checkbook();
             this.checkbookBindingSource.DataSource = this.checkbook;
         }
