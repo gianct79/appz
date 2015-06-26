@@ -4,7 +4,6 @@
 
 using System;
 using System.Drawing;
-using System.Drawing.Imaging;
 using System.Drawing.Printing;
 using System.Globalization;
 using System.IO;
@@ -166,17 +165,19 @@ namespace checkBook
 
                 g.PageUnit = GraphicsUnit.Millimeter;
 
-                g.DrawString(check.Value.ToString("F2"), font, Brushes.Black, 168, 12);
+                g.DrawString(String.Format("*** {0} ***", check.Value.ToString("N2")), font, Brushes.Black, 168, 12);
 
                 g.DrawString(check.Date.ToShortDateString(), font, Brushes.Black, 16, 18);
-                g.DrawString(check.Value.ToLongString(), font, Brushes.Black, 72, 18);
+                g.DrawString(String.Format("\t*** {0} ***", check.Value.ToLongString()), font, Brushes.Black, new Rectangle(54, 18, 120, 24));
+                g.DrawString(String.Format("\t{0}", check.PayTo), font, Brushes.Black, new Rectangle(15, 36, 30, 24));
 
                 g.DrawString(check.Value.ToString("C"), font, Brushes.Black, 16, 24);
                 g.DrawString(check.PayTo, font, Brushes.Black, 54, 30);
 
                 g.DrawString(check.Place, font, Brushes.Black, 120, 36);
                 g.DrawString(check.Date.ToString("dd"), font, Brushes.Black, 153, 36);
-                g.DrawString(check.Date.ToString("MMMM"), font, Brushes.Black, 165, 36);
+
+                g.DrawString(check.Date.ToString("MMMM"), font, Brushes.Black, new Rectangle(165, 36, 30, 12), new StringFormat { Alignment = StringAlignment.Center });
                 g.DrawString(check.Date.ToString("yy"), font, Brushes.Black, 198, 36);
             }
 
