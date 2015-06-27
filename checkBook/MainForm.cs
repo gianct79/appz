@@ -4,6 +4,7 @@
 
 using System;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Drawing.Printing;
 using System.Globalization;
 using System.IO;
@@ -116,11 +117,8 @@ namespace checkBook
 
                         PageSettings pageSettings = new PageSettings(printDocument.PrinterSettings);
 
-                        //pageSettings.Margins.Top = 0;
-                        //pageSettings.Margins.Bottom = 0;
-                        //pageSettings.Margins.Left = 0;
-                        //pageSettings.Margins.Right = 0;
                         pageSettings.PaperSize = new PaperSize("Custom", 850, 1200);
+                        //pageSettings.Margins = new Margins(0, 0, 0, 0);
 
                         //printDocument.OriginAtMargins = true;
                         printDocument.DefaultPageSettings = pageSettings;
@@ -138,15 +136,16 @@ namespace checkBook
         {
             e.Graphics.PageUnit = GraphicsUnit.Millimeter;
 
-            int y = 0;
-            int i = 0;
+            int x = (int)(-e.PageSettings.HardMarginX / 2.0f);
+            int y = (int)(-e.PageSettings.HardMarginY / 2.0f);
 
+            int i = 0;
             while (i < 4)
             {
                 Image check = DrawCheck(this.checkbook[i], e.Graphics.DpiX, e.Graphics.DpiY);
-                e.Graphics.DrawImage(check, 0, y);
+                e.Graphics.DrawImage(check, x, y);
 
-                y += 76;
+                y += 82;
                 i += 1;
             }
 
@@ -155,7 +154,7 @@ namespace checkBook
 
         private Image DrawCheck(Check check, float dpiX, float dpiY)
         {
-            Bitmap bitmap = new Bitmap(5100, 1800);
+            Bitmap bitmap = new Bitmap((int)(8.5f * dpiX), (int)(12.0f * dpiY));
             bitmap.SetResolution(dpiX, dpiY);
 
             FontFamily fontFamily = new FontFamily("Arial");
@@ -165,20 +164,20 @@ namespace checkBook
 
                 g.PageUnit = GraphicsUnit.Millimeter;
 
-                g.DrawString(String.Format("*** {0} ***", check.Value.ToString("N2")), font, Brushes.Black, 168, 12);
+                g.DrawString(String.Format("*** {0} ***", check.Value.ToString("N2")), font, Brushes.Black, 172, 4);
 
-                g.DrawString(check.Date.ToShortDateString(), font, Brushes.Black, 16, 18);
-                g.DrawString(String.Format("\t*** {0} ***", check.Value.ToLongString()), font, Brushes.Black, new Rectangle(54, 18, 120, 24));
-                g.DrawString(String.Format("\t{0}", check.PayTo), font, Brushes.Black, new Rectangle(15, 30, 30, 30));
+                g.DrawString(check.Date.ToShortDateString(), font, Brushes.Black, 16, 12);
+                g.DrawString(String.Format("              *** {0} ***", check.Value.ToLongString()), font, Brushes.Black, new Rectangle(52, 12, 140, 12));
+                g.DrawString(String.Format("  {0}", check.PayTo), font, Brushes.Black, new Rectangle(16, 28, 28, 16));
 
-                g.DrawString(check.Value.ToString("C"), font, Brushes.Black, 16, 24);
-                g.DrawString(check.PayTo, font, Brushes.Black, 54, 30);
+                g.DrawString(check.Value.ToString("C"), font, Brushes.Black, 16, 20);
+                g.DrawString(check.PayTo, font, Brushes.Black, 54, 24);
 
-                g.DrawString(check.Place, font, Brushes.Black, new Rectangle(80, 36, 72, 12), new StringFormat { Alignment = StringAlignment.Far });
-                g.DrawString(check.Date.ToString("dd"), font, Brushes.Black, 156, 36);
+                g.DrawString(check.Place, font, Brushes.Black, new Rectangle(72, 32, 80, 4), new StringFormat { Alignment = StringAlignment.Far });
+                g.DrawString(check.Date.ToString("dd"), font, Brushes.Black, 160, 32);
 
-                g.DrawString(check.Date.ToString("MMMM"), font, Brushes.Black, new Rectangle(165, 36, 30, 12), new StringFormat { Alignment = StringAlignment.Center });
-                g.DrawString(check.Date.ToString("yyyy"), font, Brushes.Black, 198, 36);
+                g.DrawString(check.Date.ToString("MMMM"), font, Brushes.Black, new Rectangle(170, 32, 30, 4), new StringFormat { Alignment = StringAlignment.Center });
+                g.DrawString(check.Date.ToString("yyyy"), font, Brushes.Black, 208, 32);
             }
 
             return bitmap;
