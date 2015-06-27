@@ -145,7 +145,7 @@ namespace checkBook
                 Image check = DrawCheck(this.checkbook[i], e.Graphics.DpiX, e.Graphics.DpiY);
                 e.Graphics.DrawImage(check, x, y);
 
-                y += 82;
+                y += 80;
                 i += 1;
             }
 
@@ -177,7 +177,7 @@ namespace checkBook
                 g.DrawString(check.Date.ToString("dd"), font, Brushes.Black, 160, 32);
 
                 g.DrawString(check.Date.ToString("MMMM"), font, Brushes.Black, new Rectangle(170, 32, 30, 4), new StringFormat { Alignment = StringAlignment.Center });
-                g.DrawString(check.Date.ToString("yyyy"), font, Brushes.Black, 208, 32);
+                g.DrawString(check.Date.ToString("yy"), font, Brushes.Black, 208, 32);
             }
 
             return bitmap;
