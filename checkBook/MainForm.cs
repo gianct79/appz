@@ -137,7 +137,8 @@ namespace checkBook
             e.Graphics.PageUnit = GraphicsUnit.Millimeter;
 
             int x = (int)(-e.PageSettings.HardMarginX / 2.0f);
-            int y = (int)(-e.PageSettings.HardMarginY / 2.0f);
+            //int y = (int)(-e.PageSettings.HardMarginY / 2.0f);
+            int y = -4;
 
             int i = 0;
             while (i < 4)
@@ -145,7 +146,7 @@ namespace checkBook
                 Image check = DrawCheck(this.checkbook[i], e.Graphics.DpiX, e.Graphics.DpiY);
                 e.Graphics.DrawImage(check, x, y);
 
-                y += 80;
+                y += 79;
                 i += 1;
             }
 
