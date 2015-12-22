@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Language" content="pt-br"/>
+<title>:: NFS-e - Nota Fiscal de Servi&ccedil;os Eletr&ocirc;nica ::</title>
+<link rel="stylesheet" type="text/css" href="./NFS-e_files/view.css"/>
+</head>
+<body>
+  <input type="file" id="xmlinput" accept=".xml" class="noprint"/>
+  <div id="moldura">
+    <table id="container" border="0" cellpadding="0" cellspacing="0" width="646">
+        <tbody>
+            <tr>
+                <td>
+                    <div class="hh1">
+                        NFS-e - NOTA FISCAL DE SERVI&Ccedil;OS ELETR&Ocirc;NICA
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="bordaInferior">
+                    <table width="100%" border="0" cellspacing="2" cellpadding="0">
+                        <tbody><tr class="teste">
+                            <td width="25%" class="bordaLateral">
+                                <span class="numeroDestaque">N&ordm;:<span id="numero"></span></span>
+                            </td>
+                            <td width="31%" class="bordaLateral">
+                                <span class="subTitulo">Emitida em:<br/></span><span class="dataEmissao" id="dataEmissao"></span>
+                            </td>
+                            <td width="17%" class="bordaLateral">
+                                <span class="subTitulo">Compet&ecirc;ncia:</span>
+                                <br/><span class="dataEmissao" id="competencia"></span>
+                            </td>
+                            <td width="27%">
+                                <span class="subTitulo">C&oacute;digo de Verifica&ccedil;&atilde;o:<br/>
+                                </span><span class="dataEmissao" id="codigoVerificacao"></span>
+                            </td>
+                        </tr>
+                    </tbody></table>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                        <tbody>
+                            <tr>
+                                <td valign="top">
+                                    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                        <tbody>
+                                            <tr>
+                                                <td width="160">
+                                                    <img id="form:imgLogo" align="middle"/>
+                                                </td>
+                                                <td width="491">
+                                                    <div class="hh3"><span id="prestador"></span></div>
+                                                    <table width="100%" cellspacing="1" class="teste">
+                                                        <tbody>
+                                                            <tr>
+                                                                <td width="52%">
+                                                                    <span class="cnpjPrincipal">CPF/CNPJ: <span id="cnpjPrestador"></span></span>
+                                                                </td>
+                                                                <td width="48%">
+                                                                    <span class="cnpjPrincipal" id="j_id2">Inscri&ccedil;&atilde;o Municipal: <span id="inscricaoPrestador"></span></span>
+                                                                </td>
+                                                            </tr>
+
+                                                            <tr>
+                                                                <td colspan="2"><span id="enderecoPrestador"></span></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <span id="j_id3">Porto Alegre
+                                                                    </span>
+                                                                </td>
+                                                                <td>
+                                                                    <span id="j_id5">RS </span>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    Telefone: N&atilde;o informado
+                                                                </td>
+                                                                <td>
+                                                                    Email: N&atilde;o informado
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                            </tr>
+
+                                            <tr>
+                                                <td colspan="2">
+                                                    <hr class="linhaDivisao"/>
+                                                </td>
+                                            </tr>
+
+                                            <tr>
+                                                <td colspan="2">
+                                                    <div class="box02">
+                                                        <table>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td colspan="2">
+                                                                        <div class="hh2">
+                                                                            Tomador do(s) Servi&ccedil;o(s)
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr class="teste">
+                                                                    <td width="52%">
+                                                                        <span class="cnpjPrincipal" id="j_id27">CPF/CNPJ: <span id="cpfTomador"></span></span>
+                                                                    </td>
+                                                                    <td width="48%">
+                                                                        <span class="cnpjPrincipal" id="j_id33"><span id="form:j_id58">Inscri&ccedil;&atilde;o Municipal: N&atilde;o Informado</span></span>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr class="teste">
+                                                                    <td colspan="2">
+                                                                        <span class="cnpjPrincipal" id="tomador"></span>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr class="teste">
+                                                                    <td colspan="2"><span id="enderecoTomador"></span></td>
+                                                                </tr>
+                                                                <tr class="teste">
+                                                                    <td>
+                                                                        <span id="j_id41"><span id="form:j_id66">Porto Alegre</span> </span>
+                                                                    </td>
+                                                                    <td>
+                                                                        <span id="j_id44"><span id="form:j_id69">RS</span> </span>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr class="teste">
+                                                                    <td>
+                                                                        Telefone: N&atilde;o informado
+                                                                    </td>
+                                                                    <td>
+                                                                        Email: N&atilde;o Informado
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                        <img src="./NFS-e_files/bottom_box02.gif" alt="." class="noprint"/>
+                                                    </div>
+                                                    <hr class="linhaDivisao"/>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+            </tr>
+            <tr class="teste">
+            </tr>
+
+            <tr>
+                <td>
+                    <div class="box02">
+                        <table border="0" cellpadding="4" cellspacing="0" width="100%">
+                            <tbody>
+                                <tr>
+                                    <td width="100%">
+                                        <div class="hh2">
+                                            Discrimina&ccedil;&atilde;o do(s) Servi&ccedil;o(s)
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="servicos"><span id="discriminacao"></span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <img src="./NFS-e_files/bottom_box02.gif" alt="." class="noprint"/>
+                        <hr class="linhaDivisao"/>
+                    </div>
+
+                    <div class="box04">
+                        <table border="0" cellpadding="2" cellspacing="0" width="100%">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <span class="subTitulo">C&oacute;digo de Tributa&ccedil;&atilde;o Municipal:</span>
+                                        <p class="teste">80100100 / Ensino pr&eacute;-escolar
+                                        </p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <hr class="linhaDivisao"/>
+                    </div>
+
+                    <div style="margin: 0px 5px;">
+                        <p class="teste">
+                            <span class="subTitulo">Subitem Lista de Servi&ccedil;os LC
+                                116/03 / Descri&ccedil;&atilde;o:</span>
+                        </p>
+                        <p class="teste">8.01 / Ensino regular pr&eacute;-escolar, fundamental, m&eacute;dio e superior.
+                        </p>
+                        <hr class="linhaDivisao"/>
+                    </div>
+
+                    <div class="box04">
+                        <span id="j_id106"> </span>
+                        <table border="0" cellpadding="2" cellspacing="0" width="100%">
+                            <tbody>
+                                <tr>
+                                    <td valign="top" width="50%">
+                                        <p class="teste">
+                                            <span class="subTitulo">Cod/Munic&iacute;pio da incid&ecirc;ncia do ISSQN:</span>
+                                        </p>
+                                        <p class="teste">4314902 / Porto Alegre
+                                        </p>
+                                    </td>
+                                    <td valign="top" width="50%">
+                                        <span class="subTitulo">Natureza da Opera&ccedil;&atilde;o:</span>
+                                        <p class="teste">Tributa&ccedil;&atilde;o no munic&iacute;pio
+                                        </p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <hr class="linhaDivisao"/>
+                </td>
+            </tr>
+
+
+
+            <tr>
+                <td>
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tbody><tr>
+                            <td valign="top" class="bordaInferior">
+                                <div class="box05">
+                                    <table border="0" cellpadding="4" cellspacing="0" width="100%">
+                                        <tbody>
+                                            <tr>
+                                                <td class="hh2" width="44%">
+                                                    Valor dos servi&ccedil;os:
+                                                </td>
+                                                <td class="hh2" width="56%" align="right">R$ <span id="valorServicos"></span></td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2">
+                                                    <table width="100%" border="0" cellpadding="0" cellspacing="0" class="tableValores">
+                                                        <tbody><tr>
+                                                            <td width="131" class="bordaInferior">
+                                                                (-) Descontos:
+                                                            </td>
+                                                            <td width="165" align="right" class="bordaInferior">R$ 0,00
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="bordaInferior">
+                                                                (-) Reten&ccedil;&otilde;es Federais:
+                                                            </td>
+                                                            <td align="right" class="bordaInferior">R$ 0,00
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="bordaInferior">
+                                                                (-) ISS Retido na Fonte:
+                                                            </td>
+                                                            <td align="right" class="bordaInferior">R$ 0,00
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="valorLiquido">
+                                                                <b>Valor L&iacute;quido:</b>
+                                                            </td>
+                                                            <td align="right" class="valorLiquido">
+                                                                <b>R$ <span id="valorLiquido"></span></b>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody></table>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <img src="./NFS-e_files/bottom_box05.gif" alt="." class="noprint"/>
+                                </div>
+                            </td>
+                            <td class="bordaInferior">
+                                <div class="box05">
+                                    <table border="0" cellpadding="4" cellspacing="0" width="100%">
+                                        <tbody>
+                                            <tr>
+                                                <td width="42%" class="hh2">
+                                                    Valor dos servi&ccedil;os:
+                                                </td>
+                                                <td width="58%" align="right" class="hh2">R$ <span id="valorServicos2"></span></td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2">
+                                                    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="teste">
+                                                        <tbody><tr>
+                                                            <td width="152" class="bordaInferior">
+                                                                (-) Dedu&ccedil;&otilde;es:
+                                                            </td>
+                                                            <td width="144" align="right" class="bordaInferior">R$ 0,00
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="bordaInferior">
+                                                                (-) Desconto Incondicionado:
+                                                            </td>
+                                                            <td align="right" class="bordaInferior">R$ 0,00
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="bordaInferior" style="font-size: 12px;">
+                                                                <strong>(=) Base de C&aacute;lculo:</strong>
+                                                            </td>
+                                                            <td align="right" class="bordaInferior" style="font-size: 12px;">
+                                                                <strong>R$ <span id="baseCalculo"></span></strong>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="bordaInferior">
+                                                                (x) Al&iacute;quota:
+                                                            </td>
+                                                            <td align="right" class="bordaInferior"><span id="aliquotaIss"></span>%
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="valorLiquido">
+                                                                <b>(=)Valor do ISS:</b>
+                                                            </td>
+                                                            <td align="right" class="valorLiquido">
+                                                                <b>R$ <span id="valorIss"></span></b>
+                                                            </td>
+                                                        </tr>
+
+                                                    </tbody></table>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <img src="./NFS-e_files/bottom_box05.gif" alt="." class="noprint"/>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody></table>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <table class="tableNoBorder" border="0" cellpadding="4" cellspacing="0" width="100%">
+                        <tbody>
+                            <tr>
+                                <td width="9%">
+                                    <img src="./NFS-e_files/img_brasao_PortoAlegre.png" alt="Brasao Prefeitura"/>
+                                </td>
+                                <td width="91%">
+                                    <span class="subTitulo">Prefeitura de Porto Alegre - Secretaria da Fazenda</span>
+                                    <p class="teste">
+                                          Rua Siqueira Campos, 1300 - 4&ordm; andar - Bairro Centro Hist&oacute;rico - CEP: 90.010-907 - Porto Alegre RS.
+                                        <br/>
+                                         Tel: 156 (op&ccedil;&atilde;o 4) ou (51) 3289-0140 (chamadas de outras cidades)
+                                        <br/>
+                                          Email: nfse@smf.prefpoa.com.br
+                                        <br/>
+                                    </p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+  </div>
+  <script src="./NFS-e_files/jxon.js"></script>
+  <script src="./NFS-e_files/utils.js"></script>
+  <script>
+  (function init() {
+    document.getElementById('xmlinput').addEventListener('change', readXML, false);
+    function readXML(e) {
+      var f = e.target.files[0];
+      if (f) {
+        var r = new FileReader();
+        r.onload = function(e) {
+          var parser = new DOMParser();
+          var xml = parser.parseFromString(e.target.result, 'text/xml');
+          var nfe = JXON.build(xml).compnfse.nfse.infnfse;
+
+          displayText('numero', nfe.numero.formatNf());
+          displayText('dataEmissao', nfe.dataemissao.toLocaleDateString());
+          displayText('competencia', nfe.dataemissao.formatCompetencia());
+          displayText('codigoVerificacao', nfe.codigoverificacao);
+
+          displayText('cnpjPrestador', nfe.prestadorservico.identificacaoprestador.cnpj.formatCnpj());
+          displayText('inscricaoPrestador', nfe.prestadorservico.identificacaoprestador.inscricaomunicipal);
+          displayText('prestador', nfe.prestadorservico.razaosocial);
+          displayAddress('enderecoPrestador', nfe.prestadorservico.endereco);
+
+          displayText('cpfTomador', nfe.tomadorservico.identificacaotomador.cpfcnpj.cpf.formatCpf());
+          displayText('tomador', nfe.tomadorservico.razaosocial);
+          displayAddress('enderecoTomador', nfe.tomadorservico.endereco);
+
+          displayText('discriminacao', nfe.servico.discriminacao);
+
+          displayValue('valorServicos', nfe.servico.valores.valorservicos);
+          displayValue('valorServicos2', nfe.servico.valores.valorservicos);
+          displayValue('valorLiquido', nfe.servico.valores.valorliquidonfse);
+          displayValue('baseCalculo', nfe.servico.valores.basecalculo);
+          displayText('aliquotaIss', nfe.servico.valores.aliquota * 100);
+          displayValue('valorIss', nfe.servico.valores.valoriss);
+        }
+        r.readAsText(f);
+      }
+    }
+  })();
+  </script>
+</body>
+</html>
