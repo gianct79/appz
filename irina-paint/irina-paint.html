@@ -1,0 +1,146 @@
+<html>
+<head></head>
+
+<style>
+
+.row {
+    display: table;
+    clear: both;
+}
+
+</style>
+
+<body>
+
+<div class='row'>
+	<span style='cursor: pointer; color: #FF0000; font-size: 80px;' onclick='clickColor("#FF0000")'>&#x2B22;</span>
+	<span style='cursor: pointer; color: #FF4800; font-size: 80px;' onclick='clickColor("#FF4800")'>&#x2B22;</span>
+	<span style='cursor: pointer; color: #FF8000; font-size: 80px;' onclick='clickColor("#FF8000")'>&#x2B22;</span>
+
+	<span style='cursor: pointer; color: #FFFF00; font-size: 80px;' onclick='clickColor("#FFFF00")'>&#x2B22;</span>
+	<span style='cursor: pointer; color: #57D200; font-size: 80px;' onclick='clickColor("#57D200")'>&#x2B22;</span>
+	<span style='cursor: pointer; color: #008000; font-size: 80px;' onclick='clickColor("#008000")'>&#x2B22;</span>
+
+	<span style='cursor: pointer; color: #00CCFF; font-size: 80px;' onclick='clickColor("#00CCFF")'>&#x2B22;</span>
+	<span style='cursor: pointer; color: #0000FF; font-size: 80px;' onclick='clickColor("#0000FF")'>&#x2B22;</span>
+	<span style='cursor: pointer; color: #800080; font-size: 80px;' onclick='clickColor("#800080")'>&#x2B22;</span>
+
+	<span style='cursor: pointer; color: #B5651D; font-size: 80px;' onclick='clickColor("#B5651D")'>&#x2B22;</span>
+	<span style='cursor: pointer; color: #803300; font-size: 80px;' onclick='clickColor("#803300")'>&#x2B22;</span>
+	<span style='cursor: pointer; color: #000000; font-size: 80px;' onclick='clickColor("#000000")'>&#x2B22;</span>
+
+	<span style='cursor: pointer; color: #F2F2F2; font-size: 80px;' onclick='clickColor("#FFFFFF")'>&#x2B22;</span>
+</div>
+
+<div class='row'>
+	<div id='colorpreview'></div>
+	<canvas id='colorpage' >
+</div>
+
+</body>
+
+<script>
+
+var colorSelected = document.getElementById('colorselected');
+
+var color;
+
+function clickColor(hex) {
+	color = [];
+	for (var i = 1, len = hex.length; i < len; i += 2) {
+		color.push(parseInt(hex.substring(i, i + 2), 16));
+	}
+	colorSelected.style.backgroundColor = hex;
+	colorSelected.textContent = hex;
+}
+
+var canvas = document.getElementById('colorpage');
+var ctx = canvas.getContext('2d');
+
+var imageData;
+var data;
+
+var img = new Image();
+
+img.onload = function() {
+	canvas.width  = this.width;
+    canvas.height = this.height;
+	ctx.drawImage(img, 0, 0);
+	img.style.display = 'none';
+
+	imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+	data = imageData.data;
+
+	for (var i = 0; i < data.length; i += 4) {
+		if (data[i] < 127) {
+			data[i]     = 0;
+			data[i + 1] = 0;
+			data[i + 2] = 0;
+		} else {
+			data[i]     = 255;
+			data[i + 1] = 255;
+			data[i + 2] = 255;
+		}
+    }
+
+    ctx.putImageData(imageData, 0, 0);
+};
+
+//img.crossOrigin = 'anonymous';
+img.src = 'paw-patrol-chase-police-car-coloring-page.png';
+
+function click(event) {
+
+	var x = event.offsetX;
+	var y = event.offsetY;
+
+    console.log(x, y);
+
+	polyFill(x, y);
+
+	ctx.putImageData(imageData, 0, 0);
+}
+
+function polyFill(x, y) {
+
+	var s = new Array();
+	s.push([x, y]);
+
+	while (s.length > 0) {
+
+		var t = s.pop();
+
+		x = t[0];
+		y = t[1];
+
+		// bounds check
+		if (x < 0 || x > canvas.width - 1 ||
+			y < 0 || y > canvas.height - 1)
+			continue;
+
+		var idx = (y * (canvas.width * 4)) + (x * 4);
+
+		// border (black) check
+		if (data[idx] == 0 && data[idx + 1] == 0 && data[idx + 2] == 0)
+			continue;
+
+		// "visited" check
+		if (data[idx] == color[0] && data[idx + 1] == color[1] && data[idx + 2] == color[2])
+			continue;
+
+		// paint new color
+		data[idx] = color[0];
+		data[idx + 1] = color[1];
+		data[idx + 2] = color[2];
+
+		s.push([x, y - 1]); // n
+		s.push([x + 1, y]); // e
+		s.push([x, y + 1]); // s
+		s.push([x - 1, y]); // w
+	}
+}
+
+canvas.addEventListener('click', click);
+
+</script>
+</html>
