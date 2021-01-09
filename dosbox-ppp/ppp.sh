@@ -44,8 +44,15 @@ function ctrl_c() {
     exit 0
 }
 
+ip=$(hostname -I)
+
+ip1=$(awk -F"." '{print $1"."$2"."$3".100"}'<<<$ip)
+ip2=$(awk -F"." '{print $1"."$2"."$3".101"}'<<<$ip)
+
 echo "** Creating fake ISP"
 echo "** Using Serial /tmp/trumpet"
+
+echo "$ip"
 
 while true
 do
@@ -62,6 +69,6 @@ do
         sleep 1
     else
         echo "** Starting pppd"
-        pppd "/tmp/trumpet" defaultroute mtu 576 192.168.2.52:192.168.2.53 login proxyarp > /dev/null 2>&1
+        pppd "/tmp/trumpet" defaultroute mtu 576 $ip1:$ip2 login proxyarp > /dev/null 2>&1
     fi
 done
