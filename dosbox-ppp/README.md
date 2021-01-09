@@ -2,11 +2,11 @@
 
 ## Requirements
 
-* Linux Box (WSL2 can work as well)
-* DOSBox
-* [Windows 3.11](https://winworldpc.com/product/windows-3/311)
-* [Trumpet Winsock](https://winworldpc.com/product/trumpet-winsock/3x)
-* [Netscape Navigator](https://winworldpc.com/product/netscape-navigator/2x)
+* Linux Box (WSL2 can work as well).
+* DOSBox.
+* [Windows 3.11](https://winworldpc.com/product/windows-3/311).
+* [Trumpet Winsock](https://winworldpc.com/product/trumpet-winsock/3x).
+* [Netscape Navigator](https://winworldpc.com/product/netscape-navigator/2x).
 
 * On Linux box:
   * Install pppd.
