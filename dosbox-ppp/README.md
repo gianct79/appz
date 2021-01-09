@@ -25,7 +25,7 @@ serial4=disabled
 
 ## Running
 
-* Run `ppp.sh` as root (original is [here](https://gist.github.com/mainframed/2300903d9cc259a2a2ab431ca152dffc):
+* Run `ppp.sh` as root (original is [here](https://gist.github.com/mainframed/2300903d9cc259a2a2ab431ca152dffc)):
 
   * Change line 65 from "10.10.0.200:10.10.0.201" to two IP addresses that are routable on home network.
   * The second address (10.10.0.201) will be the Windows 3.11 IP address.
