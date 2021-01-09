@@ -8,7 +8,7 @@
 * [Trumpet Winsock](https://winworldpc.com/product/trumpet-winsock/3x).
 * [Netscape Navigator](https://winworldpc.com/product/netscape-navigator/2x).
 
-* On Linux box:
+* On Linux:
   * Install pppd.
   * Install socat.
 
